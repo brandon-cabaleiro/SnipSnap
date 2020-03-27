@@ -13,23 +13,27 @@ export default class SignUpForm extends Component {
     		email: '',
       		username: '',
       		password: '',
+      		cpassword: ''
 		}
 	}
 
 	_handlePress() {
 
-		console.log(this.state.first);
-		console.log(this.state.last);
-		console.log(this.state.email);
-		console.log(this.state.username);
-		console.log(this.state.password);
+		// console.log(this.state.first);
+		// console.log(this.state.last);
+		// console.log(this.state.email);
+		// console.log(this.state.username);
+		// console.log(this.state.password);
+		// console.log(this.state.cpassword);
 
 		// JUST FOR TESTING PURPOSES
 		// Once you "created a new user", go ahead and test it by logging in.
 		// To get back test as username and test as password,
 		//	simply open, save, and close credentials.json.
+		// ***********************************
 		data.username = this.state.username;
 		data.password = this.state.password;
+		// ***********************************
 
 		this.firstInput.clear();
 		this.lastInput.clear();
@@ -43,7 +47,8 @@ export default class SignUpForm extends Component {
     		last: '',
     		email: '',
       		username: '',
-      		password: ''
+      		password: '',
+      		cpassword: ''
 		}
 
 		Alert.alert("Account Created!");
@@ -55,13 +60,16 @@ export default class SignUpForm extends Component {
 
 		let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-		if (reg.test(this.state.email) === false) {
-			Alert.alert("Invalid Email!");
+		if (this.state.first == '' || this.state.last == '' || this.state.email == '' || this.state.username == ''
+			|| this.state.password == '' || this.state.cpassword == '') {
+			Alert.alert("Please fill in any empty inputs!");
+		}
+		else if (this.state.password != this.state.cpassword) {
+			Alert.alert("Passwords do not match!");
 		}
 		else {
-			if (this.state.first == '' || this.state.last == '' || this.state.email == '' || this.state.username == ''
-				|| this.state.password == '' || this.passwordInput == '') {
-				Alert.alert("Please fill in any empty inputs!");
+			if (reg.test(this.state.email) == false) {
+				Alert.alert("Invalid Email!");
 			}
 			else {
 				this._handlePress();
@@ -76,7 +84,8 @@ export default class SignUpForm extends Component {
     		last: '',
     		email: '',
       		username: '',
-      		password: ''
+      		password: '',
+      		cpassword: ''
 		}
 
 		this.firstInput.clear();
@@ -103,7 +112,7 @@ export default class SignUpForm extends Component {
 					autoCorrect={false}
 					style={styles.input}
 					ref={ (input) => this.firstInput = input }
-					onChangeText = { (text) => this.setState({first:text}) } 
+					onChangeText = { (text) => this.setState({first: text}) } 
 				/>
 
 				<Text style={styles.text}>Enter your last name:</Text>
@@ -116,7 +125,7 @@ export default class SignUpForm extends Component {
 					autoCorrect={false}
 					style={styles.input}
 					ref={ (input) => this.lastInput = input }
-					onChangeText = { (text) => this.setState({last:text}) } 
+					onChangeText = { (text) => this.setState({last: text}) } 
 				/>
 
 				<Text style={styles.text}>Enter your email address:</Text>
@@ -129,7 +138,7 @@ export default class SignUpForm extends Component {
 					autoCorrect={false}
 					style={styles.input}
 					ref={ (input) => this.emailInput = input }
-					onChangeText = { (text) => this.setState({email:text}) } 
+					onChangeText = { (text) => this.setState({email:text.toLowerCase()}) } 
 				/>
 
 				<Text style={styles.text}>Create a username:</Text>
@@ -142,7 +151,7 @@ export default class SignUpForm extends Component {
 					autoCorrect={false}
 					style={styles.input}
 					ref={ (input) => this.userInput = input }
-					onChangeText = { (text) => this.setState({username:text}) } 
+					onChangeText = { (text) => this.setState({username:text.toLowerCase()}) } 
 				/>
 
 				<Text style={styles.text}>Create a password:</Text>
@@ -169,6 +178,7 @@ export default class SignUpForm extends Component {
 					style={styles.input}
 					ref={ (input) => this.cpasswordInput = input}
 					onSubmitEditing = { () => this._handlePress() }
+					onChangeText = { (text) => this.setState({cpassword:text}) }
 				/>
 
 				<TouchableOpacity

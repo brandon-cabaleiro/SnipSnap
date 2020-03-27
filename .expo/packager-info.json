@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 26181,
-  "expoServerNgrokUrl": "https://az-w2k.anonymous.snipsnap.exp.direct",
-  "packagerNgrokUrl": "https://packager.az-w2k.anonymous.snipsnap.exp.direct",
-  "ngrokPid": 26207
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }
