@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, StatusBar, Alert } from 'react-native';
-import data from '../../credentials.json'
+import data from '../../credentials.json';
 
 export default class LoginForm extends Component {
 
@@ -13,12 +13,11 @@ export default class LoginForm extends Component {
 	}
 
 	_handlePress() {
+
 		if (this.state.username == data.username && this.state.password == data.password) {
-			console.log("Login Successful");
 			Alert.alert("Login Successful");
 		}
 		else {
-			console.log("Login Failed");
 			Alert.alert("Login Failed");
 		}
 
@@ -27,7 +26,7 @@ export default class LoginForm extends Component {
 
 		this.state = {
       		username: '',
-      		password: '',
+      		password: ''
 		}
 	}
 

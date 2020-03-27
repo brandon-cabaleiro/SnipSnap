@@ -9,6 +9,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 
+import Welcome from './screens/HomeScreen';
+import Login from './components/Login/Login';
+import SignUp from './components/SignUp/SignUp';
+
 const Stack = createStackNavigator();
 
 export default function App(props) {
@@ -51,7 +55,9 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
+            <Stack.Screen name="Welcome" component={Welcome} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Sign Up" component={SignUp}/>
           </Stack.Navigator>
         </NavigationContainer>
       </View>

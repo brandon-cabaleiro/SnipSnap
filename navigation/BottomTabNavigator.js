@@ -19,7 +19,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Home"
         component={HomeScreen}
         options={{
-          title: 'Login',
+          title: 'Home',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />
@@ -32,6 +32,6 @@ function getHeaderTitle(route) {
 
   switch (routeName) {
     case 'Home':
-      return 'Login';
+      return 'Home';
   }
 }
