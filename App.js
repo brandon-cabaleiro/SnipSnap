@@ -47,6 +47,7 @@ export default function App(props) {
     loadResourcesAndDataAsync();
   }, []);
 
+  // load the stack navigator for navigating through the screens
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null;
   } else {

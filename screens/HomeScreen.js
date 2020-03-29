@@ -9,6 +9,7 @@ import { MonoText } from '../components/StyledText';
 
 export default class SnipSnap extends React.Component {
 
+  // sets a container to display logo, motto, and buttons
   render() {
     return (
       <View style={styles.container}>
@@ -24,13 +25,13 @@ export default class SnipSnap extends React.Component {
         </View>
 
         <TouchableOpacity
-          onPress={ () => this.props.navigation.navigate('Login') }
+          onPress={ () => this.props.navigation.navigate('Login') } // when Login is pressed go to the login page
           style={styles.buttonContainer}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={ () => this.props.navigation.navigate('Sign Up') }
+          onPress={ () => this.props.navigation.navigate('Sign Up') } // when Sign Up is pressed go to the sign up page
           style={styles.buttonContainer}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>

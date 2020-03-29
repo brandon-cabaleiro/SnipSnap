@@ -3,6 +3,8 @@ import { StyleSheet, View, Image, Text, KeyboardAvoidingView } from 'react-nativ
 import LoginForm from './LoginForm';
 
 export default class Login extends Component {
+
+	// sets a container to display logo, motto, and buttons
 	render() {
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -18,6 +20,7 @@ export default class Login extends Component {
 
 				</View>
 
+				// loads the login form
 				<View style={styles.formContainer}>
 					<LoginForm />
 				</View>

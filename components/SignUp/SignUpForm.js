@@ -5,6 +5,7 @@ import data from '../../credentials.json';
 
 export default class SignUpForm extends Component {
 
+	// sets up the attributes for the SignUpForm object
 	constructor(props){
     	super(props);
     	this.state = {
@@ -17,6 +18,9 @@ export default class SignUpForm extends Component {
 		}
 	}
 
+	// gets the inputted username and password
+	// so that you are able to test the that
+	// the sign up form is working
 	_handlePress() {
 
 		// console.log(this.state.first);
@@ -56,18 +60,24 @@ export default class SignUpForm extends Component {
 		this.clear_inputs();
 	}
 
+	// function to test if all the input boxes have been filled
+	// and that the email format is proper
 	validate() {
 
 		let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
+		// checks if all input boxes are filled
 		if (this.state.first == '' || this.state.last == '' || this.state.email == '' || this.state.username == ''
 			|| this.state.password == '' || this.state.cpassword == '') {
 			Alert.alert("Please fill in any empty inputs!");
 		}
+
+		// checks to see that the password is the same in both input boxes
 		else if (this.state.password != this.state.cpassword) {
 			Alert.alert("Passwords do not match!");
 		}
 		else {
+			// checks to see that the email is in proper format
 			if (reg.test(this.state.email) == false) {
 				Alert.alert("Invalid Email!");
 			}
@@ -77,6 +87,8 @@ export default class SignUpForm extends Component {
 		}
 	}
 
+	// function to reset inputs
+	// not being used as of now, used for testing
 	clear_inputs() {
 
 		this.state = {
@@ -96,6 +108,7 @@ export default class SignUpForm extends Component {
 		this.cpasswordInput.clear();
 	}
 
+	// sets up container for input boxes
 	render() {
 		return (
 			<View style={ styles.container }>
@@ -177,7 +190,7 @@ export default class SignUpForm extends Component {
 					autoCorrect={false}
 					style={styles.input}
 					ref={ (input) => this.cpasswordInput = input}
-					onSubmitEditing = { () => this._handlePress() }
+					onSubmitEditing = { () => this.validate() }
 					onChangeText = { (text) => this.setState({cpassword:text}) }
 				/>
 
