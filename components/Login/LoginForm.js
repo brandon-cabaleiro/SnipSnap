@@ -4,7 +4,6 @@ import data from '../../credentials.json';
 
 export default class LoginForm extends Component {
 
-	// sets up the attributes for the LoginForm object
 	constructor(props){
     	super(props);
     	this.state = {
@@ -13,7 +12,6 @@ export default class LoginForm extends Component {
 		}
 	}
 
-	// function to check if the username and password are correct
 	_handlePress() {
 
 		if (this.state.username == data.username && this.state.password == data.password) {
@@ -32,7 +30,6 @@ export default class LoginForm extends Component {
 		}
 	}
 
-	// sets up container to display input boxes
 	render() {
 		return (
 			<View style={styles.container}>
@@ -42,7 +39,7 @@ export default class LoginForm extends Component {
 				<TextInput 
 					placeholder="Username"
 					returnKeyType="next"
-					onSubmitEditing={() => this.passwordInput.focus()} // when you hit next on the keyboard, go to the password box
+					onSubmitEditing={() => this.passwordInput.focus()}
 					keyboardType="email-address"
 					autoCapitalize="none"
 					autoCorrect={false}
@@ -60,11 +57,11 @@ export default class LoginForm extends Component {
 					style={styles.input}
 					ref={ (input) => this.passwordInput = input}
 					onChangeText = { (text) => this.setState({password:text}) }
-					onSubmitEditing = { () => this._handlePress() } // when you hit submit on the keyboard, run _handlepress()
+					onSubmitEditing = { () => this._handlePress() }
 				/>
 
 				<TouchableOpacity
-					onPress={ () => this._handlePress() } // when you hit the LOGIN button, run _handlepress()
+					onPress={ () => this._handlePress() }
 					style={styles.buttonContainer}>
 					<Text style={styles.buttonText}>LOGIN</Text>
 				</TouchableOpacity>

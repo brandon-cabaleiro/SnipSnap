@@ -4,7 +4,6 @@ import SignUpForm from './SignUpForm';
 
 export default class Signup extends Component {
 
-	// sets a container to display logo, motto, and buttons
 	render() {
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -22,7 +21,7 @@ export default class Signup extends Component {
 				</View>
 
 				<View style={styles.formContainer}>
-					<SignUpForm /> // loads the sign up form
+					<SignUpForm />
 				</View>
 			</KeyboardAvoidingView>
 		);

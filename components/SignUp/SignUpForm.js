@@ -5,7 +5,6 @@ import data from '../../credentials.json';
 
 export default class SignUpForm extends Component {
 
-	// sets up the attributes for the SignUpForm object
 	constructor(props){
     	super(props);
     	this.state = {
@@ -18,9 +17,6 @@ export default class SignUpForm extends Component {
 		}
 	}
 
-	// gets the inputted username and password
-	// so that you are able to test the that
-	// the sign up form is working
 	_handlePress() {
 
 		// console.log(this.state.first);
@@ -60,8 +56,6 @@ export default class SignUpForm extends Component {
 		this.clear_inputs();
 	}
 
-	// function to test if all the input boxes have been filled
-	// and that the email format is proper
 	validate() {
 
 		let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -87,8 +81,6 @@ export default class SignUpForm extends Component {
 		}
 	}
 
-	// function to reset inputs
-	// not being used as of now, used for testing
 	clear_inputs() {
 
 		this.state = {
@@ -108,7 +100,6 @@ export default class SignUpForm extends Component {
 		this.cpasswordInput.clear();
 	}
 
-	// sets up container for input boxes
 	render() {
 		return (
 			<View style={ styles.container }>
