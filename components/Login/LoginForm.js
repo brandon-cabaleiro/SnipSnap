@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity, Text, StatusBar, Alert } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, Text, StatusBar, Alert, KeyboardAvoidingView } from 'react-native';
 import data from '../../credentials.json';
 
 export default class LoginForm extends Component {
