@@ -47,7 +47,8 @@ export default class LoginForm extends Component {
 				<TextInput 
 					placeholder="Username"
 					returnKeyType="next"
-					onSubmitEditing={() => this.passwordInput.focus()} // go to password input box
+					// go to password input box
+					onSubmitEditing={() => this.passwordInput.focus()}
 					keyboardType="email-address"
 					autoCapitalize="none"
 					autoCorrect={false}
@@ -65,11 +66,13 @@ export default class LoginForm extends Component {
 					style={styles.input}
 					ref={ (input) => this.passwordInput = input}
 					onChangeText = { (text) => this.setState({password:text}) }
-					onSubmitEditing = { () => this._handlePress() } // call _handlePress when the user hits Submit on the iphone keyboard
+					// call _handlePress when the user hits Submit on the iphone keyboard
+					onSubmitEditing = { () => this._handlePress() }
 				/>
 
 				<TouchableOpacity
-					onPress={ () => this._handlePress() } // call _handlePress when the user hits LOGIN
+					// call _handlePress when the user hits LOGIN
+					onPress={ () => this._handlePress() }
 					style={styles.buttonContainer}>
 					<Text style={styles.buttonText}>LOGIN</Text>
 				</TouchableOpacity>

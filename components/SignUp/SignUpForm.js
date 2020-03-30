@@ -191,11 +191,13 @@ export default class SignUpForm extends Component {
 					autoCorrect={false}
 					style={styles.input}
 					ref={ (input) => this.cpasswordInput = input}
+					// call validate when the user hits Submit on the iphone keyboard
 					onSubmitEditing = { () => this.validate() }
 					onChangeText = { (text) => this.setState({cpassword:text}) }
 				/>
 
 				<TouchableOpacity
+					// call validate when the user hits Submit on the iphone keyboard
 					onPress={ () => this.validate() }
 					style={styles.buttonContainer}>
 					<Text style={styles.buttonText}>Create Account</Text>

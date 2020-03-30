@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": "https://5t-83z.anonymous.snipsnap.exp.direct",
-  "packagerNgrokUrl": "https://packager.5t-83z.anonymous.snipsnap.exp.direct",
-  "ngrokPid": 34874
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 36793,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }
