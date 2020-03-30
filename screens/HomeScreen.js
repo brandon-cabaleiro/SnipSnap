@@ -40,6 +40,8 @@ export default class SnipSnap extends React.Component {
   }
 }
 
+// stylesheet to provide letter fonts and sizes
+// as well as background colors and formats
 const styles = StyleSheet.create({
   container: {
     flex: 1,

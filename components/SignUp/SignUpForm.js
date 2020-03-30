@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, StatusBar, Alert, KeyboardAvoidingView,
 			TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { ScrollView } from 'react-native-gesture-handler';
+
 import data from '../../credentials.json';
 
 export default class SignUpForm extends Component {
+
+	// creates attributes for LoginForm object
 
 	constructor(props){
     	super(props);
@@ -18,13 +24,6 @@ export default class SignUpForm extends Component {
 	}
 
 	_handlePress() {
-
-		// console.log(this.state.first);
-		// console.log(this.state.last);
-		// console.log(this.state.email);
-		// console.log(this.state.username);
-		// console.log(this.state.password);
-		// console.log(this.state.cpassword);
 
 		// JUST FOR TESTING PURPOSES
 		// Once you "created a new user", go ahead and test it by logging in.
@@ -58,6 +57,10 @@ export default class SignUpForm extends Component {
 
 	validate() {
 
+		// this function checks that the user has inputted all information
+		// into the input boxes
+		// this function also checks if the user entered in the proper format for the email address		
+
 		let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 		// checks if all input boxes are filled
@@ -83,6 +86,9 @@ export default class SignUpForm extends Component {
 
 	clear_inputs() {
 
+		// for testing
+		// function to clear object's attribute values
+
 		this.state = {
     		first: '',
     		last: '',
@@ -102,6 +108,10 @@ export default class SignUpForm extends Component {
 
 	render() {
 		return (
+
+			// sets up container for input boxes
+			// each input box has a setting for user input and outlook
+
 			<View style={ styles.container }>
 
 				<StatusBar barStyle="dark-content"/>
@@ -195,6 +205,8 @@ export default class SignUpForm extends Component {
 	}
 }
 
+// stylesheet to provide letter fonts and sizes
+// as well as background colors and formats
 const styles = StyleSheet.create({
 	container: {
 		padding: 30

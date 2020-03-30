@@ -4,7 +4,10 @@ import data from '../../credentials.json';
 
 export default class LoginForm extends Component {
 
-	constructor(props){
+	constructor(props) {
+
+		// creates attributes for LoginForm object
+
     	super(props);
     	this.state = {
       		username: '',
@@ -13,6 +16,8 @@ export default class LoginForm extends Component {
 	}
 
 	_handlePress() {
+
+		// this function checks that the inputted username and password are correct
 
 		if (this.state.username == data.username && this.state.password == data.password) {
 			Alert.alert("Login Successful");
@@ -32,6 +37,9 @@ export default class LoginForm extends Component {
 
 	render() {
 		return (
+
+			// sets up container for input boxes
+			// each input box has a setting for user input and outlook
 			<View style={styles.container}>
 
 				<StatusBar barStyle="dark-content"/>
@@ -39,7 +47,7 @@ export default class LoginForm extends Component {
 				<TextInput 
 					placeholder="Username"
 					returnKeyType="next"
-					onSubmitEditing={() => this.passwordInput.focus()}
+					onSubmitEditing={() => this.passwordInput.focus()} // go to password input box
 					keyboardType="email-address"
 					autoCapitalize="none"
 					autoCorrect={false}
@@ -57,11 +65,11 @@ export default class LoginForm extends Component {
 					style={styles.input}
 					ref={ (input) => this.passwordInput = input}
 					onChangeText = { (text) => this.setState({password:text}) }
-					onSubmitEditing = { () => this._handlePress() }
+					onSubmitEditing = { () => this._handlePress() } // call _handlePress when the user hits Submit on the iphone keyboard
 				/>
 
 				<TouchableOpacity
-					onPress={ () => this._handlePress() }
+					onPress={ () => this._handlePress() } // call _handlePress when the user hits LOGIN
 					style={styles.buttonContainer}>
 					<Text style={styles.buttonText}>LOGIN</Text>
 				</TouchableOpacity>
@@ -70,6 +78,8 @@ export default class LoginForm extends Component {
 	}
 }
 
+// stylesheet to provide letter fonts and sizes
+// as well as background colors and formats
 const styles = StyleSheet.create({
 	container: {
 		padding: 30

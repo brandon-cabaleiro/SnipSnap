@@ -6,6 +6,8 @@ export default class Signup extends Component {
 
 	render() {
 		return (
+
+			// sets up containers for logo and motto and login input boxes
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
 
 				<View style={styles.logoContainer}>
@@ -20,7 +22,7 @@ export default class Signup extends Component {
 
 				</View>
 
-				<View style={styles.formContainer}>
+				<View>
 					<SignUpForm />
 				</View>
 			</KeyboardAvoidingView>
@@ -28,6 +30,8 @@ export default class Signup extends Component {
 	}
 }
 
+// stylesheet to provide letter fonts and sizes
+// as well as background colors and formats
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,

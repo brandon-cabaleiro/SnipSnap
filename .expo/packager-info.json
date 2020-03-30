@@ -3,7 +3,7 @@
   "expoServerPort": null,
   "packagerPort": null,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerNgrokUrl": "https://5t-83z.anonymous.snipsnap.exp.direct",
+  "packagerNgrokUrl": "https://packager.5t-83z.anonymous.snipsnap.exp.direct",
+  "ngrokPid": 34874
 }
