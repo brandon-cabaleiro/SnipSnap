@@ -104,12 +104,13 @@ router.get('/getBarber/:barber_id', (req, res) => {
     if (err || barber == null) {
 
       __consoleError(`Invalid Get Request Recieved: GetBarber(${barber_id})`)
+      console.log(`\t${err}`)
 
       res.json({
         success: false,
         barber_id: barber_id
       })
-      return;
+
     }
     else {
       __consoleSuccess(`Barber with id=${barber_id} found. returning...`)
@@ -118,7 +119,7 @@ router.get('/getBarber/:barber_id', (req, res) => {
         user_ref_id: barber.user_ref_id,
         success: true
       })
-      return;
+
     }
 
   })
@@ -130,6 +131,51 @@ router.get('/getBarber/:barber_id', (req, res) => {
 =========POST=========
 ======================
 */
+router.post('/userLogin', (req, res) => {
+  console.log('\n\n')
 
+  let username = 'username' in req.body ? req.body.username : null
+  let hashed_password = 'password' in req.body ? req.body.password : null
+
+  if (username == null || hashed_password == null) {
+    __consoleError(`Invalid Post Request Recieved: userLogin(${username}, ${hashed_password})`)
+    res.json({
+      valid: false
+    })
+    return;
+  }
+
+  __consoleSuccess(`Post Request Recieved: userLogin(${}, ${})`)
+  User.findOne({ username: username, password: hashed_password}, (err, user) => {
+
+    if (err || user == null) {
+      __consoleError(`Invalid Post Request Recieved: userLogin(${username}, ${hashed_password})`)
+      console.log(`\t${err}`)
+
+      res.json({
+        valid: false
+      })
+    }
+    else {
+      __consoleSuccess(`User with: username=${username} and password=${hashed_password} found. returning data...`)
+
+      res.json({
+        valid: true
+      })
+    }
+
+  })
+
+})
+
+router.post('/createUser', (req, res) => {
+  console.log('\n\n')
+
+  res.json({
+    error: 'Not implemented',
+    success: false
+  })
+
+})
 
 module.exports = router
