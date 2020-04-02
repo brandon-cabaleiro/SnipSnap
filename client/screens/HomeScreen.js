@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { MonoText } from '../components/StyledText';
 
-export default class SnipSnap extends React.Component {
+export default class SnipSnap extends Component {
 
   // Sets a container to display logo, motto, and buttons.
   render() {
@@ -17,18 +17,15 @@ export default class SnipSnap extends React.Component {
             style={styles.logo} 
             source={require('../images/logo.png')} 
           />
-
           <Text style={styles.title}>
             "We'll snip that snap real quick"
           </Text>
         </View>
-
         <TouchableOpacity
           onPress={ () => this.props.navigation.navigate('Login') } // when Login is pressed go to the login page
           style={styles.buttonContainer}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           onPress={ () => this.props.navigation.navigate('Sign Up') } // when Sign Up is pressed go to the sign up page
           style={styles.buttonContainer}>
