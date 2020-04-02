@@ -1,15 +1,14 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as WebBrowser from 'expo-web-browser';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
 import { MonoText } from '../components/StyledText';
 
 export default class SnipSnap extends React.Component {
 
-  // sets a container to display logo, motto, and buttons
+  // Sets a container to display logo, motto, and buttons.
   render() {
     return (
       <View style={styles.container}>
@@ -40,8 +39,8 @@ export default class SnipSnap extends React.Component {
   }
 }
 
-// stylesheet to provide letter fonts and sizes
-// as well as background colors and formats
+// Stylesheet to provide letter fonts and sizes
+// as well as background colors and formats.
 const styles = StyleSheet.create({
   container: {
     flex: 1,
