@@ -3,25 +3,20 @@ import { StyleSheet, View, Image, Text, KeyboardAvoidingView } from 'react-nativ
 import SignUpForm from './SignUpForm';
 
 export default class Signup extends Component {
-
+	
+	// Sets up containers for logo and motto and sign up input boxes.
 	render() {
 		return (
-
-			// sets up containers for logo and motto and login input boxes
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
-
 				<View style={styles.logoContainer}>
 					<Image 
 						style={styles.logo} 
 						source={require('../../images/logo.png')} 
 					/>
-
 					<Text style={styles.title}>
 						"We'll snip that snap real quick"
 					</Text>
-
 				</View>
-
 				<View>
 					<SignUpForm />
 				</View>
@@ -30,8 +25,8 @@ export default class Signup extends Component {
 	}
 }
 
-// stylesheet to provide letter fonts and sizes
-// as well as background colors and formats
+// Stylesheet to provide letter fonts and sizes
+// as well as background colors and formats.
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
