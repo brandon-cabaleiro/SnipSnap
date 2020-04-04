@@ -1,6 +1,6 @@
 const chalk = require('chalk')
 const express = require('express')
-var router = express.Router ()
+var router = express.Router()
 
 // Schemas
 const User = require('../models/UserSchema')
@@ -145,7 +145,7 @@ router.post('/userLogin', (req, res) => {
     return;
   }
 
-  __consoleSuccess(`Post Request Recieved: userLogin(${}, ${})`)
+  //__consoleSuccess(`Post Request Recieved: userLogin(${}, ${})`)
   User.findOne({ username: username, password: hashed_password}, (err, user) => {
 
     if (err || user == null) {
