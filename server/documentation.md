@@ -65,9 +65,17 @@ Body Fields:
 
 Response
 
-| Good        | Bad           |
-| ------------- |:-------------:|
-| ```{valid: true}```     | ```{valid: false}``` |
+```
+{
+  success: true,
+  user_id: 1920391203910
+}
+```
+```
+{
+  success: false
+}
+```
 
 #### Create User
 `/api/createUser/`
@@ -92,5 +100,30 @@ Response
 {
   error: 'User exists',
   success: false
+}
+```
+
+
+#### Create Barber Shop
+`/api/createBarberShop/`
+
+**Description:** Create a barber shop. Converts the user into a barber. A user can only have
+**1** barber shop open.
+
+Body Fields:
+* **shop_name:** The name of the shop
+* **user_id:** The user id of the user opening the shop
+
+Response
+```
+{
+  success: true,
+  shop_id: 91209301093109309109310
+}
+```
+```
+{
+  sucess: false,
+  error: User is already a barber
 }
 ```
