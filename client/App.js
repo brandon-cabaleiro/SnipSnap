@@ -10,8 +10,8 @@ import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 
 import Welcome from './screens/HomeScreen';
-import Login from './components/Login/Login';
-import SignUp from './components/SignUp/SignUp';
+import Login from './screens/Login/Login';
+import SignUp from './screens/SignUp/SignUp';
 
 const Stack = createStackNavigator();
 
