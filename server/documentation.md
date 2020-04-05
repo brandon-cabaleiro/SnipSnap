@@ -41,7 +41,8 @@ Response
 {
   shop_name: David's Barbershop,
   user_ref_id: 9104901459890905905289,
-  success: true
+  success: true,
+  itemized_menus: [{ ... }]
 }
 ```
 ```
@@ -50,6 +51,29 @@ Response
   success: false
 }
 ```
+
+#### Get Barber Menus
+`/api/barber/getMenus/{barber_id}`
+
+**Description:** Retrieve the itemized menus for a given barber shop (specified by `barber_id`).
+
+Parameters
+* **barber_id:** the id associated with the barber
+
+Response
+```
+{
+  success: true,
+  itemized_menus: [{...}] // an array of all the itemized menus
+}
+```
+```
+{
+  success: false,
+  error: <error msg>
+}
+```
+
 ------
 ## POST
 
@@ -65,9 +89,17 @@ Body Fields:
 
 Response
 
-| Good        | Bad           |
-| ------------- |:-------------:|
-| ```{valid: true}```     | ```{valid: false}``` |
+```
+{
+  success: true,
+  user_id: 1920391203910
+}
+```
+```
+{
+  success: false
+}
+```
 
 #### Create User
 `/api/createUser/`
@@ -92,5 +124,30 @@ Response
 {
   error: 'User exists',
   success: false
+}
+```
+
+
+#### Create Barber Shop
+`/api/createBarberShop/`
+
+**Description:** Create a barber shop. Converts the user into a barber. A user can only have
+**1** barber shop open.
+
+Body Fields:
+* **shop_name:** The name of the shop
+* **user_id:** The user id of the user opening the shop
+
+Response
+```
+{
+  success: true,
+  shop_id: 91209301093109309109310
+}
+```
+```
+{
+  sucess: false,
+  error: User is already a barber
 }
 ```

@@ -7,48 +7,35 @@ const chalk = require('chalk');
 // For Login/Registration
 
 // routes
-const api_routes = require('./routes/api'); 
+const api_routes = require('./routes/api');
 
 // Create Express App
-const app = express(); 
+const app = express();
 
 // TODO load mongodb info and PORT from DOTENV
 const MONGO_CONFIG = {
-  'URI': 'mongodb://127.0.0.1:27017',
+  'URI': 'mongodb://127.0.0.1:27017/snip-snap',
   'PASS': ''
 }
 
 const PORT = 8090
 
 // Connect to Database
-//mongoose.connect(MONGO_CONFIG.URI, { useNewUrlParser: true, useUnifiedTopology: true });
-//mongoose.connection.once('open', () => console.log(`${chalk.blue(`🗲  Connected to MongoLab instance 🗲`)}`));
-//mongoose.connection.on('error', error => console.log(`${chalk.yellow(`⚠  Error connecting to MongoLab: ` + error + ` ⚠`)}`));
+mongoose.connect(MONGO_CONFIG.URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connection.once('open', () => console.log(`${chalk.blue(`🗲  Connected to MongoLab instance 🗲`)}`));
+mongoose.connection.on('error', error => console.log(`${chalk.yellow(`⚠  Error connecting to MongoLab: ` + error + ` ⚠`)}`));
 
-app.use(cors()); 
-app.use(bodyParser.json()); 
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
 
 // Setup Routes
-//app.use('/api', api_routes)
+app.use('/api', api_routes)
 
 app.get('/', (req, res) => res.send('Hello World test...'));
-
-
-// Login
-app.post('/login', (request, response) => {
-
-  console.log(request); 
-
-  var username = request.body.username; 
-  var password = request.body.password; 
-
-  console.log("SERVER: Received login request from user " + username);
-
-
-})
-
-
-
 
 
 // listen to the server port
