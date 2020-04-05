@@ -41,7 +41,8 @@ Response
 {
   shop_name: David's Barbershop,
   user_ref_id: 9104901459890905905289,
-  success: true
+  success: true,
+  itemized_menus: [{ ... }]
 }
 ```
 ```
@@ -50,6 +51,29 @@ Response
   success: false
 }
 ```
+
+#### Get Barber Menus
+`/api/barber/getMenus/{barber_id}`
+
+**Description:** Retrieve the itemized menus for a given barber shop (specified by `barber_id`).
+
+Parameters
+* **barber_id:** the id associated with the barber
+
+Response
+```
+{
+  success: true,
+  itemized_menus: [{...}] // an array of all the itemized menus
+}
+```
+```
+{
+  success: false,
+  error: <error msg>
+}
+```
+
 ------
 ## POST
 
