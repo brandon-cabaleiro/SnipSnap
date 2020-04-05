@@ -1,10 +1,16 @@
 const chalk = require('chalk')
 const express = require('express')
 var router = express.Router()
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 // Schemas
 const User = require('../models/UserSchema')
 const Barber = require('../models/BarberSchema')
+
+// Validation 
+const validateRegister = require('../validation/register')
+const validateLogin = require('../validation/login')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
