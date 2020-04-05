@@ -6,7 +6,7 @@ var router = express.Router()
 const ObjectID = require('mongoose').Types.ObjectId
 const User = require('../models/UserSchema')
 const Barber = require('../models/BarberSchema')
-
+const ItemMenu = require('../models/ItemMenuSchema')
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ==========================API ROUTES==========================
@@ -107,7 +107,7 @@ router.get('/getBarber/:barber_id', (req, res) => {
     return;
   }
 
-  __consoleError(`Get Request Recieved: GetBarber(${barber_id})`)
+  __consoleSuccess(`Get Request Recieved: GetBarber(${barber_id})`)
 
   if (!ObjectID.isValid( barber_id )) {
     console.log(`\t${chalk.red('Error: ')} barber id (${barber_id}) is not a valid object id`)
@@ -119,7 +119,7 @@ router.get('/getBarber/:barber_id', (req, res) => {
   }
 
   // Query the database
-  Barber.findOne({ _id: ObjectID(barber_id) }, (err, barber) => {
+  Barber.findOne({ _id: ObjectID(barber_id) }, async (err, barber) => {
 
     // could not find barber data
     if (err || barber == null) {
@@ -135,10 +135,154 @@ router.get('/getBarber/:barber_id', (req, res) => {
 
     }
     else {
+      // attempt to acquire all of the item menus
+      let unpacked_repsonses = []
+
+      let responses = []
+
+      for (let i in barber.item_menus) {
+        responses.push( new Promise((resolve, reject) => {
+
+          // get the menu id and query it in the database
+          let item_menu_id = barber.item_menus[i]
+
+          // check if the menu id is a valid object id
+          if (!ObjectID.isValid(item_menu_id)) {
+            resolve(null) // responses[i] will have the value of null
+                          // that we can later filter out
+          }
+          else {
+            // search for the itemized menu
+            return ItemMenu.findOne({ _id: ObjectID(item_menu_id) }, async (err, item_doc) => {
+              if (err || item_doc == null) resolve(null)
+              else {
+                resolve({
+                  menu_name: item_doc.menu_name,
+                  menu_options: item_doc.menu_options
+                })
+              }
+            })
+          }
+
+        }) )
+
+      }
+
+      // await all of the promises...
+      unpacked_repsonses = new Array(responses.length);
+
+      let fulfilled = false
+      await Promise.all(responses).then((response_arr) => {
+        unpacked_repsonses = response_arr
+        fulfilled = true
+      })
+
+      // block while all promises are still pending
+      while (!fulfilled);
+
+      // remove the responses that are null
+      unpacked_repsonses = unpacked_repsonses.filter(_response_ => _response_ != null)
+
       __consoleSuccess(`Barber with id=${barber_id} found. returning...`)
       res.json({
         shop_name: barber.shop_name,
         user_ref_id: barber.user_ref_id,
+        itemized_menus: unpacked_repsonses,
+        success: true
+      })
+
+    }
+
+  })
+
+})
+
+router.get('/barber/getMenus/:barber_id', (req, res) => {
+
+  if (!('barber_id') in req.params) {
+    __consoleError(`Invalid Get Request Recieved: getMenus(null)`)
+  }
+  __consoleSuccess(`Get Request Recieved: getMenus(${req.params.barber_id})`)
+
+  // Check if the barber_id is a valid object id
+  if (!ObjectID.isValid(req.params.barber_id)) {
+    console.log(`\t${chalk.red('Error')}: Barber id is not a valid ObjectID`)
+    res.json({
+      success: false,
+      error: 'Invalid barber id'
+    });
+    return;
+  }
+
+  // !!!
+  let barber_id = req.params.barber_id
+  Barber.findOne({ _id: ObjectID(barber_id) }, async (err, barber) => {
+
+    // could not find barber data
+    if (err || barber == null) {
+
+      __consoleError(`Invalid Get Request Recieved: Barber:getMenus(${barber_id})`)
+      console.log(`\t${chalk.red('Error: ')}: Barber could not be found`)
+      console.log(`\t${err}`)
+
+      res.json({
+        success: false,
+        error: 'Barber does not exist.'
+      })
+
+    }
+    else {
+      // attempt to acquire all of the item menus
+      let unpacked_repsonses = []
+
+      let responses = []
+
+      for (let i in barber.item_menus) {
+        responses.push( new Promise((resolve, reject) => {
+
+          // get the menu id and query it in the database
+          let item_menu_id = barber.item_menus[i]
+
+          // check if the menu id is a valid object id
+          if (!ObjectID.isValid(item_menu_id)) {
+            resolve(null) // responses[i] will have the value of null
+                          // that we can later filter out
+          }
+          else {
+            // search for the itemized menu
+            return ItemMenu.findOne({ _id: ObjectID(item_menu_id) }, async (err, item_doc) => {
+              if (err || item_doc == null) resolve(null)
+              else {
+                resolve({
+                  menu_name: item_doc.menu_name,
+                  menu_options: item_doc.menu_options
+                })
+              }
+            })
+          }
+
+        }) )
+
+      }
+
+      // await all of the promises...
+      unpacked_repsonses = new Array(responses.length);
+
+      let fulfilled = false
+      await Promise.all(responses).then((response_arr) => {
+        unpacked_repsonses = response_arr
+        fulfilled = true
+      })
+
+      // block while all promises are still pending
+      while (!fulfilled);
+
+      // remove the responses that are null
+      unpacked_repsonses = unpacked_repsonses.filter(_response_ => _response_ != null)
+
+      __consoleSuccess(`Barber with id=${barber_id} found. returning...`)
+      res.json({
+        itemized_menus: unpacked_repsonses,
         success: true
       })
 
@@ -327,7 +471,8 @@ router.post('/createBarberShop', (req, res) => {
           // create the new barber shop
           new_barber_shop = new Barber({
             shop_name: req.body.shop_name,
-            user_ref_id: req.body.user_id
+            user_ref_id: req.body.user_id,
+            menu_options: []
           })
 
           new_barber_shop.save((err, shop_) => {
