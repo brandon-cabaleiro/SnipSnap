@@ -21,7 +21,10 @@ const MONGO_CONFIG = {
 const PORT = 8090
 
 // Connect to Database
-mongoose.connect(MONGO_CONFIG.URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(MONGO_CONFIG.URI, {
+  useNewUrlParser: true, useUnifiedTopology: true,
+  useFindAndModify: false
+});
 mongoose.connection.once('open', () => console.log(`${chalk.blue(`🗲  Connected to MongoLab instance 🗲`)}`));
 mongoose.connection.on('error', error => console.log(`${chalk.yellow(`⚠  Error connecting to MongoLab: ` + error + ` ⚠`)}`));
 
