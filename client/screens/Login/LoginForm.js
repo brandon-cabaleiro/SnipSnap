@@ -18,12 +18,15 @@ export default class LoginForm extends Component {
 
 	_handlePress() {
 
-		axios.post('/api/userLogin/', {
+
+		axios.post('/api/userLogin', {
+
 
 			existing_user: {
-				username: this.userInput, 
-				password: this.passwordInput
+				username: this.state.username, 
+				password: this.state.password
 			}
+
 
 		},)
 		.then((response) => {

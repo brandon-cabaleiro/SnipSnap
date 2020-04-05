@@ -56,12 +56,12 @@ export default class SignUpForm extends Component {
 		axios.post('/api/createUser/', {
 
 			new_user: {
-				first: this.firstInput, 
-				last: this.lastInput, 
-				email: this.emailInput, 
-				username: this.userInput, 
-				password: this.passwordInput, 
-				cpassword: this.passwordInput 
+				first: this.state.first, 
+				last: this.state.last, 
+				email: this.state.email, 
+				username: this.state.username, 
+				password: this.state.password, 
+				cpassword: this.state.cpassword 
 			}
 
 		},)
