@@ -1,6 +1,7 @@
 const chalk = require('chalk')
 const express = require('express')
 var router = express.Router()
+const jwt = require("jsonwebtoken")
 
 // Schemas
 const ObjectID = require('mongoose').Types.ObjectId
@@ -325,6 +326,20 @@ router.post('/userLogin', (req, res) => {
     else {
       __consoleSuccess(`User with: username=${username} and password=${hashed_password} found. returning data...`)
 
+      // jwt.sign(
+      //   payload,
+      //   keys.secretOrKey,
+      //   {
+      //     expiresIn: 31556926 // 1 year in seconds
+      //   },
+      //   (err, token) => {
+      //     res.json({
+      //       success: true,
+      //       user_id: user._id,
+      //       token: "Bearer " + token
+      //     });
+      //   }
+      // );
       res.json({
         success: true,
         user_id: user._id
@@ -707,4 +722,4 @@ router.post('/barber/createMenu', (req, res) => {
   // end
 })
 
-module.exports = router
+module.exports = router; 

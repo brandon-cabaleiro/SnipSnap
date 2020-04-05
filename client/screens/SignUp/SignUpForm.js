@@ -4,6 +4,7 @@ import { StyleSheet, View, TextInput, TouchableOpacity, Text, StatusBar, Alert, 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ScrollView } from 'react-native-gesture-handler';
+import axios from 'axios'; 
 
 import data from '../../credentials.json';
 
@@ -30,27 +31,49 @@ export default class SignUpForm extends Component {
 		// To get back test as username and test as password,
 		//	simply open, save, and close credentials.json.
 		// ***********************************
-		data.username = this.state.username;
-		data.password = this.state.password;
+		//data.username = this.state.username;
+		//data.password = this.state.password;
 		// ***********************************
 
-		this.firstInput.clear();
-		this.lastInput.clear();
-		this.emailInput.clear();
-		this.userInput.clear();
-		this.passwordInput.clear();
-		this.cpasswordInput.clear();
+		// this.firstInput.clear();
+		// this.lastInput.clear();
+		// this.emailInput.clear();
+		// this.userInput.clear();
+		// this.passwordInput.clear();
+		// this.cpasswordInput.clear();
 
-		this.state = {
-    		first: '',
-    		last: '',
-    		email: '',
-      		username: '',
-      		password: '',
-      		cpassword: ''
-		}
+		// this.state = {
+    	// 	first: '',
+    	// 	last: '',
+    	// 	email: '',
+      	// 	username: '',
+      	// 	password: '',
+      	// 	cpassword: ''
+		// }
 
-		Alert.alert("Account Created!");
+		// Alert.alert("Account Created!");
+
+		axios.post('/api/createUser/', {
+
+			new_user: {
+				first: this.firstInput, 
+				last: this.lastInput, 
+				email: this.emailInput, 
+				username: this.userInput, 
+				password: this.passwordInput, 
+				cpassword: this.passwordInput 
+			}
+
+		},)
+		.then((response) => {
+		   
+			console.log(response.data); 
+
+		})
+		.catch((error) => {
+		   // Handle returned errors here
+			console.log(error); 
+		});
 
 		this.clear_inputs();
 	}
