@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, StatusBar, Alert, KeyboardAvoidingView } from 'react-native';
 import data from '../../credentials.json';
+import axios from 'axios'; 
 
 export default class LoginForm extends Component {
 
@@ -17,14 +18,34 @@ export default class LoginForm extends Component {
 
 	_handlePress() {
 
+		axios.post('/api/userLogin/', {
+
+			existing_user: {
+				username: this.userInput, 
+				password: this.passwordInput
+			}
+
+		},)
+		.then((response) => {
+		   
+			console.log(response.data); 
+
+		})
+		.catch((error) => {
+		   // Handle returned errors here
+			console.log(error); 
+		});
+
+
+
 		// this function checks that the inputted username and password are correct
 
-		if (this.state.username == data.username && this.state.password == data.password) {
-			Alert.alert("Login Successful");
-		}
-		else {
-			Alert.alert("Login Failed");
-		}
+		// if (this.state.username == data.username && this.state.password == data.password) {
+		// 	Alert.alert("Login Successful");
+		// }
+		// else {
+		// 	Alert.alert("Login Failed");
+		// }
 
 		this.userInput.clear();
 		this.passwordInput.clear();
