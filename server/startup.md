@@ -8,7 +8,7 @@ First, install
 Once you have this installed, open your command prompt/terminal and type `mongo --version` to make
 sure that it has been installed. If you get an error, then MongoDB was not properly installed.
 
-In your terminal, navigate to the **Snip Snap**. Then run `mongod --dbpath="./server/data"` to
+In your terminal, navigate to the **Snip Snap**. Then run `mongod --dbpath="./data"` to
 startup the MongoDB server for Snip Snap. This terminal must remain open to be able to access
 the database.
 
