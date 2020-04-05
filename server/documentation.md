@@ -151,3 +151,131 @@ Response
   error: User is already a barber
 }
 ```
+
+#### Create Itemization Menu
+`/api/barber/createMenu`
+
+**Description:** Create a new itemization menu for a barber shop. A shop can have multiple
+itemization menus.
+
+Body Fields:
+* **barber_id:** The id of the barber creating the menu
+* **menu_name:** The name of the menu
+* **menu_options:** An array of the menu options that will be available
+
+Each menu option is an object that has the following format:
+```
+{
+  option_name: String,
+  price_min: Number,
+  price_max: Number,
+  image_url (optional): String,
+  description: String
+}
+```
+Response
+```
+{
+  // A sucessful response returns the data stored in the database
+  // along with success == true
+
+  success: true,
+
+  barber_id: 10940909kjkjf118981,
+  menu_name: "Sample Menu Name",
+  menu_options: [{
+
+    option_name: 'Sample Option',
+    price_min: 10.0,
+    price_max: 10.0,
+    imag_url: http://www.sample_image.com/test.png,
+    description: "This is a sample option"
+
+  }]
+}
+```
+```
+{
+  success: false,
+  error: <error message>
+}
+```
+
+#### Update Itemization Menu
+`/api/barber/updateMenu`
+
+**Description:** Update an existing itemization menu for a barber shop.
+
+Body Fields:
+* **barber_id:** The id of the barber's menu being updated
+* **menu_id:** The id of the menu being updated
+* **upated_menu_name (optional):** The updated menu name
+* **updated_options (optional):** A dictionary of the options to update
+
+`updated_options` example:
+```
+// Sample Options:
+menu_options = [{
+
+    option_name: 'Sample Option',
+    price_min: 10.0,
+    price_max: 10.0,
+    imag_url: http://www.sample_image.com/test.png,
+    description: "This is a sample option"
+
+  }]
+
+//-------------------------[ ... ]------------------------------------
+
+// If I wanted to update the menu_options above, I would
+// find the index of the option I want to update and pass the update
+// parameters
+// e.g
+
+updated_options = {
+  0: // <--- key 0 matches index 0 of menu_options
+  {
+    updated_option_name: 'Updated Option Name',
+    updated_description: 'This is the updated option description'
+  }
+}
+
+
+/*
+ *  The updated_options here will change the option_name and
+ *  option_description to the updated_option_name and
+ *  updated_description values respectively.
+
+ *  Prefix the field name being updated with updated_
+ *  (option_name -> updated_option_name)
+ *  (price_max -> updated_price_max)
+ *  (price_min -> updated_price_min)
+*/
+```
+Response
+```
+{
+  // A sucessful response returns the data updated in the database
+  // along with success == true
+
+  success: true,
+
+  barber_id: 10940909kjkjf118981,
+  menu_name: "Updated Menu Name",
+  menu_options: [{
+
+    option_name: 'Updated Option Name',
+    price_min: 10.0,
+    price_max: 10.0,
+    imag_url: http://www.sample_image.com/test.png,
+    description: "This is the updated option description"
+
+  }]
+}
+```
+```
+{
+  success: false,
+  error: <error message>
+}
+```

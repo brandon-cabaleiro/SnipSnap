@@ -514,4 +514,197 @@ router.post('/createBarberShop', (req, res) => {
 
 })
 
+
+router.post('/barber/createMenu', (req, res) => {
+
+  // insufficient fields provided
+  if (!('barber_id' in req.body) || !('menu_name' in req.body)
+  || !('menu_options' in req.body)) {
+
+    __consoleError("Invalid Post Request Recieved: createMenu()")
+    console.log(`\t${chalk.yellow('barber_id:')} ${req.body.barber_id}`)
+    console.log(`\t${chalk.yellow('menu_name:')} ${req.body.menu_name}`)
+    console.log(`\t${chalk.yellow('menu_options:')} ${req.body.menu_options}`)
+
+    res.json({
+      success: false,
+      error: 'Insufficient data provided'
+    })
+    return;
+  }
+
+  __consoleSuccess("Post Request Recieved: createMenu()")
+  console.log(`\t${chalk.blue('barber_id:')} ${req.body.barber_id}`)
+  console.log(`\t${chalk.blue('menu_name:')} ${req.body.menu_name}`)
+  console.log(`\t${chalk.blue(`menu_options(${typeof req.body.menu_options}):`)} ${req.body.menu_options}`)
+
+  // check if the barber id is valid
+  if (!ObjectID.isValid(req.body.barber_id)) {
+    console.log(`\n\t${chalk.red('Error:')} barber_id is not a valid ObjectID`)
+
+    res.json({
+      success: false,
+      error: 'barber_id is not a valid ObjectID'
+    })
+    return;
+  }
+
+  // check if there is at least 1 option in the menu
+  if (typeof req.body.menu_options != typeof [] || req.body.menu_options.length == 0) {
+    console.log(`\n\t${chalk.red('Error:')} No menu options provided`)
+
+    res.json({
+      success: false,
+      error: 'No menu options provided'
+    })
+    return;
+  }
+
+  // make sure the menu options provided have the necessary information
+  let menu_options = req.body.menu_options
+  for (i in menu_options) {
+    let menu_option = menu_options[i]
+
+    // if price_max is empty, price_max == price_min
+    if (typeof menu_option != typeof {}
+    || !('option_name') in menu_option
+    || !('price_min') in menu_option
+    || !('description') in menu_option)
+    {
+      console.log(`\n\t${chalk.red('Error:')} Menu options are missing required fields.`)
+
+      res.json({
+        success: false,
+        error: 'Menu options are missing required fields'
+      })
+      return;
+    }
+
+    // transform the menu_options to include filler data
+    if (!('price_max' in menu_option)) {
+      menu_options[i]['price_max'] = menu_option['price_min']
+    }
+
+    if (typeof menu_options[i]['price_max'] != typeof 1
+    || typeof menu_options[i]['price_max'] != typeof 1.1
+    || typeof menu_options[i]['price_min'] != typeof 1
+    || typeof menu_options[i]['price_min'] != typeof 1.1) {
+      console.log(`\t${chalk.red('Error:')} Price min/max are not of type ${typeof 1}`)
+      res.json({
+        success: false,
+        error: 'Fields are inconsistent'
+      })
+      return;
+    }
+
+    if (menu_options[i]['price_max'] < menu_options[i]['price_min']) {
+      console.log(`\t${chalk.red('Error:')} Price min is greater than price max.`)
+
+      res.json({
+        success: false,
+        error: 'Fields are inconsistent'
+      })
+      return;
+    }
+
+    if (!('image_url') in menu_option) {
+      menu_options[i]['image_url'] = "<default_image>"
+    }
+  }
+
+  Barber.findOne({ _id: ObjectID(req.body.barber_id)}, (err, barber_doc) => {
+
+    // barber does not exist
+    if (err || barber_doc == null) {
+      console.log(`\n\t${chalk.red('Error:')} Could not find barber with id ${req.body.barber_doc}`)
+      res.json({
+        success: false,
+        error: 'Could not find barber'
+      })
+    }
+    else {
+      // update the barber item_menu array
+      let updated_barber_menu = barber_doc.item_menus
+
+      // create the new menu object
+      let new_item_menu = new ItemMenu({
+        menu_name: req.body.menu_name,
+        menu_options: menu_options
+      })
+
+      // save the item
+      new_item_menu.save((err, menu_doc) => {
+
+        // did not save ...
+        if (err || menu_doc == null) {
+          console.log(`\n\t${chalk.red('Error:')} Could not save the item data`)
+
+          res.json({
+            success: false,
+            error: 'Problem saving item menu'
+          })
+        }
+
+        // successfully saved
+        else {
+
+          console.log(`\t${chalk.green('(1/2) Complete:')} Successfully saved the new item menu`)
+          console.log(`${chalk.gray('\t...Attempting to update barber data...')}`)
+
+          if (!updated_barber_menu.includes( menu_doc._id )) {
+            // add it to the updated list
+            updated_barber_menu.push( menu_doc._id )
+          }
+
+          // Now update the barber doc !
+          Barber.findOneAndUpdate({ _id: ObjectID(req.body.barber_id) },
+            { $set: {item_menus: updated_barber_menu} },
+            {upsert: false},
+            (err, updated_doc) => {
+
+              if (err || updated_doc == null) {
+                console.log(`\n\t${chalk.red('Error:')} Could not update barber doc...`)
+                console.log(`${chalk.gray('\tAborting...')}`)
+
+                // delete the menu item from the database ...
+                ItemMenu.deleteOne({ _id: menu_doc._id }, (err) => {
+
+                  if (err) {
+                    console.log(`\t${chalk.red('Error:')} Problem deleting item menu`)
+                    console.log(`${chalk.gray('\tCould not abort. abandoning')}`)
+                  }
+
+                  // return json
+                  res.json({
+                    success: false,
+                    error: "Problem updating barber data."
+                  })
+
+                })
+
+              }
+              else {
+                console.log(`\t${chalk.green('(2/2) Complete:')} Successfully updated the barber document`)
+
+                res.json({
+                  success: true,
+                  barber_id: updated_doc._id,
+                  menu_name: req.body.menu_name,
+                  menu_options: updated_barber_menu
+                })
+
+              }
+
+          })
+
+        }
+      }) // end of ItemMenu.save()
+
+    }
+
+  }); // end of Barber.findOne ()
+
+  // end
+})
+
 module.exports = router
