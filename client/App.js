@@ -9,7 +9,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 
-import Welcome from './screens/HomeScreen';
+import Welcome from './screens/Welcome';
 import Login from './screens/Login/Login';
 import SignUp from './screens/SignUp/SignUp';
 
