@@ -5,10 +5,8 @@ import axios from 'axios';
 
 export default class LoginForm extends Component {
 
+	// Creates attributes for LoginForm object
 	constructor(props) {
-
-		// creates attributes for LoginForm object
-
     	super(props);
     	this.state = {
       		username: '',
@@ -16,52 +14,38 @@ export default class LoginForm extends Component {
 		}
 	}
 
+	// Submits login data via POST request.
 	_handlePress() {
-
-
 		axios.post('http://localhost:8090/api/userLogin', {
-
 			username: this.state.username, 
 			password: this.state.password
-
-		},)
+		})
 		.then((response) => {
-		   
-			console.log(response.data); 
-
+			console.log(response.data);
+			if(response.data.success == true) {
+				alert("Login Successful")
+			} else if(response.data.success == false) {
+				alert("Login Failed")
+			}
 		})
 		.catch((error) => {
-		   // Handle returned errors here
 			console.log(error); 
 		});
 
-
-
-		// this function checks that the inputted username and password are correct
-
-		// if (this.state.username == data.username && this.state.password == data.password) {
-		// 	Alert.alert("Login Successful");
-		// }
-		// else {
-		// 	Alert.alert("Login Failed");
-		// }
-
+		// Reset forms and stat.
 		this.userInput.clear();
 		this.passwordInput.clear();
-
 		this.state = {
       		username: '',
       		password: ''
 		}
 	}
 
+	// Sets up container for input boxes.
+	// Each input box has a setting for user input and outlook.
 	render() {
 		return (
-
-			// sets up container for input boxes
-			// each input box has a setting for user input and outlook
 			<View style={styles.container}>
-
 				<StatusBar barStyle="dark-content"/>
 
 				<TextInput 
@@ -86,12 +70,12 @@ export default class LoginForm extends Component {
 					style={styles.input}
 					ref={ (input) => this.passwordInput = input}
 					onChangeText = { (text) => this.setState({password:text}) }
-					// call _handlePress when the user hits Submit on the iphone keyboard
+					// Call _handlePress when the user hits Submit on the iphone keyboard
 					onSubmitEditing = { () => this._handlePress() }
 				/>
 
 				<TouchableOpacity
-					// call _handlePress when the user hits LOGIN
+					// Call _handlePress when the user hits LOGIN
 					onPress={ () => this._handlePress() }
 					style={styles.buttonContainer}>
 					<Text style={styles.buttonText}>LOGIN</Text>
@@ -101,8 +85,8 @@ export default class LoginForm extends Component {
 	}
 }
 
-// stylesheet to provide letter fonts and sizes
-// as well as background colors and formats
+// Stylesheet to provide letter fonts and sizes
+// as well as background colors and formats.
 const styles = StyleSheet.create({
 	container: {
 		padding: 30
