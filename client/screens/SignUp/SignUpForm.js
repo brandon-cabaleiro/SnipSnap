@@ -53,15 +53,18 @@ export default class SignUpForm extends Component {
 
 		// Alert.alert("Account Created!");
 
-		axios.post('/api/createUser/', {
+		console.log(this.state.first); 
+
+
+		axios.post('http://localhost:8090/api/createUser', {
+
 
 			new_user: {
-				first: this.state.first, 
-				last: this.state.last, 
+				first_name: this.state.first, 
+				last_name: this.state.last, 
 				email: this.state.email, 
 				username: this.state.username, 
-				password: this.state.password, 
-				cpassword: this.state.cpassword 
+				password: this.state.password 
 			}
 
 		},)
@@ -75,7 +78,7 @@ export default class SignUpForm extends Component {
 			console.log(error); 
 		});
 
-		this.clear_inputs();
+		//this.clear_inputs();
 	}
 
 	validate() {
