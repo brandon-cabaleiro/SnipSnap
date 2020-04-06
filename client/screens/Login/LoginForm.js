@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, StatusBar, Alert, KeyboardAvoidingView } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios'; 
 
 export default class LoginForm extends Component {
@@ -23,6 +25,7 @@ export default class LoginForm extends Component {
 			console.log(response.data);
 			if(response.data.success == true) {
 				alert("Login Successful")
+				this.props.navigation.navigate("Home")
 			} else if(response.data.success == false) {
 				alert("Login Failed")
 			}
@@ -31,7 +34,7 @@ export default class LoginForm extends Component {
 			console.log(error); 
 		});
 
-		// Reset forms and stat.
+		// Reset forms and state.
 		this.userInput.clear();
 		this.passwordInput.clear();
 		this.state = {

@@ -12,6 +12,7 @@ import useLinking from './navigation/useLinking';
 import Welcome from './screens/Welcome';
 import Login from './screens/Login/Login';
 import SignUp from './screens/SignUp/SignUp';
+import Home from './screens/Home';
 
 const Stack = createStackNavigator();
 
@@ -59,6 +60,7 @@ export default function App(props) {
             <Stack.Screen name="Welcome" component={Welcome} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Sign Up" component={SignUp}/>
+            <Stack.Screen name="Home" component={Home}/>
           </Stack.Navigator>
         </NavigationContainer>
       </View>
