@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { MonoText } from '../components/StyledText';
 
-export default class SnipSnap extends Component {
+export default class Welcome extends Component {
 
   // Sets a container to display logo, motto, and buttons.
   render() {
