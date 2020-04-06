@@ -326,20 +326,6 @@ router.post('/userLogin', (req, res) => {
     else {
       __consoleSuccess(`User with: username=${username} and password=${hashed_password} found. returning data...`)
 
-      // jwt.sign(
-      //   payload,
-      //   keys.secretOrKey,
-      //   {
-      //     expiresIn: 31556926 // 1 year in seconds
-      //   },
-      //   (err, token) => {
-      //     res.json({
-      //       success: true,
-      //       user_id: user._id,
-      //       token: "Bearer " + token
-      //     });
-      //   }
-      // );
       res.json({
         success: true,
         user_id: user._id
@@ -353,7 +339,7 @@ router.post('/userLogin', (req, res) => {
 router.post('/createUser', (req, res) => {
   console.log('\n\n')
 
-
+  console.log(req.body.username); 
 
   // check if the required body fields are filled out
   if (!('username' in req.body) || !('password' in req.body) || !('first_name' in req.body)

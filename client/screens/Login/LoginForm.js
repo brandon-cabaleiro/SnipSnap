@@ -21,12 +21,8 @@ export default class LoginForm extends Component {
 
 		axios.post('http://localhost:8090/api/userLogin', {
 
-
-			existing_user: {
-				username: this.state.username, 
-				password: this.state.password
-			}
-
+			username: this.state.username, 
+			password: this.state.password
 
 		},)
 		.then((response) => {
