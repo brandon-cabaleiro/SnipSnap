@@ -52,6 +52,7 @@ export default class SignUpForm extends Component {
 			console.log(response.data); 
 			if(response.data.success == true) {
 				alert("Account Created!")
+				this.props.navigation.navigate("Login")
 			} else if(response.data.success == false) {
 				alert("Signup Failed")
 			}
