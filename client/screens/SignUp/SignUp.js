@@ -18,7 +18,7 @@ export default class Signup extends Component {
 					</Text>
 				</View>
 				<View>
-					<SignUpForm />
+					<SignUpForm navigation={this.props.navigation}/>
 				</View>
 			</KeyboardAvoidingView>
 		);

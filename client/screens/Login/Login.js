@@ -6,6 +6,7 @@ export default class Login extends Component {
 	
 	// Sets up containers for logo and motto and login input boxes.
 	render() {
+		console.log(this.props)
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
 				<View style={styles.logoContainer}>
@@ -18,7 +19,7 @@ export default class Login extends Component {
 					</Text>
 				</View>
 				<View>
-					<LoginForm />
+					<LoginForm navigation={this.props.navigation}/>
 				</View>
 			</KeyboardAvoidingView>
 		);
