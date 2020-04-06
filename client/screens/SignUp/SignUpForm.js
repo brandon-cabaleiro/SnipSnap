@@ -6,12 +6,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { ScrollView } from 'react-native-gesture-handler';
 import axios from 'axios'; 
 
-import data from '../../credentials.json';
-
 export default class SignUpForm extends Component {
 
-	// creates attributes for LoginForm object
-
+	// Creates attributes for SignUpForm object.
 	constructor(props){
     	super(props);
     	this.state = {
@@ -24,96 +21,8 @@ export default class SignUpForm extends Component {
 		}
 	}
 
-	_handlePress() {
-
-		// JUST FOR TESTING PURPOSES
-		// Once you "created a new user", go ahead and test it by logging in.
-		// To get back test as username and test as password,
-		//	simply open, save, and close credentials.json.
-		// ***********************************
-		//data.username = this.state.username;
-		//data.password = this.state.password;
-		// ***********************************
-
-		// this.firstInput.clear();
-		// this.lastInput.clear();
-		// this.emailInput.clear();
-		// this.userInput.clear();
-		// this.passwordInput.clear();
-		// this.cpasswordInput.clear();
-
-		// this.state = {
-    	// 	first: '',
-    	// 	last: '',
-    	// 	email: '',
-      	// 	username: '',
-      	// 	password: '',
-      	// 	cpassword: ''
-		// }
-
-		// Alert.alert("Account Created!");
-
-		console.log(this.state.first); 
-		console.log(this.state.last); 
-		console.log(this.state.email); 
-		console.log(this.state.username); 
-		console.log(this.state.password);
-
-
-		axios.post('http://localhost:8090/api/createUser', {
-				first_name: this.state.first, 
-				last_name: this.state.last, 
-				email: this.state.email, 
-				username: this.state.username, 
-				password: this.state.password 
-		},)
-		.then((response) => {
-		   
-			console.log(response.data); 
-
-		})
-		.catch((error) => {
-		   // Handle returned errors here
-			console.log(error); 
-		});
-
-		//this.clear_inputs();
-	}
-
-	validate() {
-
-		// this function checks that the user has inputted all information
-		// into the input boxes
-		// this function also checks if the user entered in the proper format for the email address		
-
-		let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-		// checks if all input boxes are filled
-		if (this.state.first == '' || this.state.last == '' || this.state.email == '' || this.state.username == ''
-			|| this.state.password == '' || this.state.cpassword == '') {
-			Alert.alert("Please fill in any empty inputs!");
-		}
-
-		// checks to see that the password is the same in both input boxes
-		else if (this.state.password != this.state.cpassword) {
-			Alert.alert("Passwords do not match!");
-		}
-		else {
-			// checks to see that the email is in proper format
-			if (reg.test(this.state.email) == false) {
-				Alert.alert("Invalid Email!");
-			}
-			else {
-				this._handlePress();
-			}
-		}
-	}
-
+	// Clears this objects state & form fields.
 	clear_inputs() {
-
-		// for testing
-		// function to clear object's attribute values
-
 		this.state = {
     		first: '',
     		last: '',
@@ -122,7 +31,6 @@ export default class SignUpForm extends Component {
       		password: '',
       		cpassword: ''
 		}
-
 		this.firstInput.clear();
 		this.lastInput.clear();
 		this.emailInput.clear();
@@ -131,12 +39,57 @@ export default class SignUpForm extends Component {
 		this.cpasswordInput.clear();
 	}
 
+	// Submits Sign Up data via POST request.
+	_handlePress() {
+		axios.post('http://localhost:8090/api/createUser', {
+				first_name: this.state.first, 
+				last_name: this.state.last, 
+				email: this.state.email, 
+				username: this.state.username, 
+				password: this.state.password 
+		},)
+		.then((response) => {
+			console.log(response.data); 
+			if(response.data.success == true) {
+				alert("Account Created!")
+			} else if(response.data.success == false) {
+				alert("Signup Failed")
+			}
+		})
+		.catch((error) => {
+			console.log(error); 
+		});
+		this.clear_inputs();
+	}
+
+	// Validates the the format of the user's inputted information, checking
+	// for empty fields, email formatting, and password consistency.
+	validate() {
+		let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+		// Checks if all input boxes are filled.
+		if (this.state.first == '' || this.state.last == '' || this.state.email == '' || this.state.username == ''
+			|| this.state.password == '' || this.state.cpassword == '') {
+			alert("Please fill in any empty inputs!");
+		}
+
+		// Checks to see that the password is the same in both input boxes.
+		else if (this.state.password != this.state.cpassword) {
+			alert("Passwords do not match!");
+		} else {
+			// Checks to see that the email is in proper format.
+			if (reg.test(this.state.email) == false) {
+				alert("Invalid Email!");
+			} else {
+				this._handlePress();
+			}
+		}
+	}
+
+	// Sets up container for input boxes, where each input box has a setting
+	// for user input and outlook.
 	render() {
 		return (
-
-			// sets up container for input boxes
-			// each input box has a setting for user input and outlook
-
 			<View style={ styles.container }>
 
 				<StatusBar barStyle="dark-content"/>
@@ -232,8 +185,8 @@ export default class SignUpForm extends Component {
 	}
 }
 
-// stylesheet to provide letter fonts and sizes
-// as well as background colors and formats
+// Stylesheet to provide letter fonts and sizes
+// as well as background colors and formats.
 const styles = StyleSheet.create({
 	container: {
 		padding: 30

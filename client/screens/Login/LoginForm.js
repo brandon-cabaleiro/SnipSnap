@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, StatusBar, Alert, KeyboardAvoidingView } from 'react-native';
-import data from '../../credentials.json';
 import axios from 'axios'; 
 
 export default class LoginForm extends Component {
