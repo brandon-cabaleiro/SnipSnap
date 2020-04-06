@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
-  "webpackServerPort": null
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 21379,
+  "expoServerNgrokUrl": "https://pj-2kx.anonymous.client.exp.direct",
+  "packagerNgrokUrl": "https://packager.pj-2kx.anonymous.client.exp.direct",
+  "ngrokPid": 21396,
+  "webpackServerPort": 19006
 }
