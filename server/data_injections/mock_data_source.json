@@ -1,0 +1,82 @@
+{
+  "data": [{
+      "type": "barberShop",
+      "preference": "black",
+      "menu_variations": [{
+          "option_name": "Line Up",
+          "price_min": [5, 8],
+          "image_url": [
+            "https://www.menshairstylestoday.com/wp-content/uploads/2016/02/Line-Up-Haircut-6.jpg",
+            "https://www.menshairstylestoday.com/wp-content/uploads/2016/09/Barber-Haircuts-High-Fade-and-Line-Up-with-Buzz-Cut.jpg",
+            "https://ourhairstyle.com/wp-content/uploads/thr/251/251.1198.jpg",
+            "https://res.cloudinary.com/emazecom/image/fetch/c_limit,a_ignore,w_280,h_240/http%3A%2F%2Ffarm8.staticflickr.com%2F7215%2F7214157694_70257894df_z.jpg",
+            "https://i.ytimg.com/vi/UU6mPXozJsI/maxresdefault.jpg"
+          ]
+        },{
+          "option_name": "Fade",
+          "price_min": [10, 20],
+          "image_url": [
+            "https://i2.wp.com/therighthairstyles.com/wp-content/uploads/2014/05/11-low-fade-haircut-2.jpg?resize=500%2C486&ssl=1",
+            "https://www.hairmanz.com/wp-content/uploads/2019/05/amazing-black-men-haircuts-3.jpg",
+            "https://lovehairstyles.com/wp-content/uploads/2018/10/black-men-haircuts-mid-drop-fade-sponge.jpg",
+            "https://www.hairstylesmag.com/wp-content/uploads/2018/04/Black-Men-Haircuts-Taper-Fade-2018.jpg"
+          ]
+        },{
+            "option_name": "Part",
+            "price_min": [5, 5],
+            "image_url": [
+              "https://i.pinimg.com/474x/69/23/fd/6923fd2f49f142b036169900dadf71e0--fresh-haircuts-mens-haircuts.jpg",
+              "https://qph.fs.quoracdn.net/main-qimg-1c8e5748a2fb4954a30595dac339d9c9.webp",
+              "https://drumsofthunder.org/wp-content/uploads/haircut-parts-317862-haircut-with-part-of-haircut-parts.jpg",
+              "https://menhairstylesworld.com/wp-content/uploads/2017/06/Comb-Over-Hard-Part-Haircut.jpg"
+            ]
+        }]
+    },{
+        "type": "barberShop",
+        "preference": "white",
+        "menu_variations": [{
+            "option_name": "Line Up",
+            "price_min": [5, 8],
+            "image_url": [
+              "https://www.menshairstylestoday.com/wp-content/uploads/2016/02/Line-Up-Haircut-6.jpg",
+              "https://www.menshairstylestoday.com/wp-content/uploads/2016/09/Barber-Haircuts-High-Fade-and-Line-Up-with-Buzz-Cut.jpg",
+              "https://ourhairstyle.com/wp-content/uploads/thr/251/251.1198.jpg",
+              "https://res.cloudinary.com/emazecom/image/fetch/c_limit,a_ignore,w_280,h_240/http%3A%2F%2Ffarm8.staticflickr.com%2F7215%2F7214157694_70257894df_z.jpg",
+              "https://i.ytimg.com/vi/UU6mPXozJsI/maxresdefault.jpg"
+            ]
+          },{
+              "option_name": "Bowl Cut",
+              "price_min": [10, 20],
+              "image_url": [
+                "https://hairstylecamp.com/wp-content/uploads/A-bowl-cut-hairstyle.jpg",
+                "https://i2.wp.com/therighthairstyles.com/wp-content/uploads/2016/03/26-precise-white-blonde-bowl-cut.jpg?resize=500%2C500&ssl=1",
+                "https://www.styleinterest.com/wp-content/uploads/2017/09/13280417-bowl-cuts-.jpg",
+                "https://imgix.bustle.com/uploads/image/2019/10/29/0796ad9c-22d4-4ecc-8b28-076727298656-69182.jpeg?w=1200&h=630&q=70&fit=crop&crop=faces&fm=jpg"
+              ]
+          }]
+    },{
+        "type": "salon",
+        "preference": "black",
+        "menu_variations": [{
+            "option_name": "Dreadlocks",
+            "price_min": [100, 400],
+            "price_max": [300, 600],
+            "image_url": [
+              "https://image.shutterstock.com/image-photo/handsome-muscular-black-man-dreadlocks-260nw-1185560122.jpg",
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRLwJMQSauLrcK9_61geOtaBHHZzNUHnuxtn9tUhN9NJ48yTMJx&usqp=CAU",
+              "https://bikupload.com/wp-content/uploads/2020/03/short-dreads-hairstyles-wonderful-50-memorable-dreadlocks-styles-for-men-to-try-out-men-gallery.jpg",
+              "https://i.pinimg.com/originals/f4/7c/a2/f47ca2c61df1316da8d3beaed4afca16.jpg"
+            ]
+        },{
+            "option_name": "Braiding",
+            "price_min": [150, 300],
+            "price_max": [250, 500],
+            "image_url": [
+              "https://media.allure.com/photos/5965284a1533d77186041936/1:1/w_2000,h_2000,c_limit/India-Love-Box-Braids.jpg",
+              "https://www.stylevore.com/wp-content/uploads/2019/06/355bd4f7e6cd9e534c3fbfc5a8294897.jpg",
+              "https://stayglam.com/wp-content/uploads/2019/12/Small-Box-Braids-660x400.jpg",
+              "https://cdn11.bigcommerce.com/s-0xh7j/images/stencil/1280x1280/products/16205/18960/outre-boxbraid__95628.1561578843.jpg?c=2&imbypass=on"
+            ]
+        }]
+    }]
+}

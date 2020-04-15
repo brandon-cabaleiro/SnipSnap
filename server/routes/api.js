@@ -1,6 +1,10 @@
 const chalk = require('chalk')
 const express = require('express')
 var router = express.Router()
+var jwt = require(`jsonwebtoken`)
+
+const ImageServiceAPI = require('../services/image_upload')
+const ACCESS_TOKEN_SCRET = "klafkeagjkasfnlafjfk12-091ifkasdlfajkfjeiaflakefjl"
 
 // Schemas
 const ObjectID = require('mongoose').Types.ObjectId
@@ -92,6 +96,39 @@ router.get('/getUser/:user_id', (req, res) => {
 
 })
 
+router.get('/getBarbers/:skip/:limit', (req, res) => {
+  console.log(`\n\n`)
+  console.log(`getBarbers(${req.params.skip}, ${req.params.limit})`)
+
+  let skip_ = parseInt(req.params.skip)
+  let limit_ = parseInt(req.params.limit)
+
+  if (skip_ == NaN || limit_ == NaN) {
+    console.log (`Invalid params provided`)
+    res.json({
+      success: false,
+      error: "Invalid params provided"
+    })
+    return;
+  }
+
+  Barber.find({}, null, { skip: skip_, limit: limit_}, (err, docs) => {
+    if (err || docs == null) {
+      console.log(`Error retriving barbers...`)
+      res.json({
+        success: false,
+        error: "Problem retrieving barber"
+      })
+    }
+    else {
+      console.log(`Successfully retrieved barbers`)
+      res.json({
+        success: true,
+        barbers: docs
+      })
+    }
+  })
+})
 
 router.get('/getBarber/:barber_id', (req, res) => {
   console.log ("\n\n")
@@ -185,10 +222,12 @@ router.get('/getBarber/:barber_id', (req, res) => {
 
       __consoleSuccess(`Barber with id=${barber_id} found. returning...`)
       res.json({
+        itemized_menus: unpacked_repsonses,
+        location: barber.location,
         shop_name: barber.shop_name,
         user_ref_id: barber.user_ref_id,
-        itemized_menus: unpacked_repsonses,
-        success: true
+        success: true,
+        recent_story: barber.recent_story,
       })
 
     }
@@ -312,6 +351,9 @@ router.post('/userLogin', (req, res) => {
   }
 
   __consoleSuccess(`Post Request Recieved: userLogin(${username}, ${hashed_password})`)
+
+
+
   User.findOne({ username: username, password: hashed_password}, (err, user) => {
 
     if (err || user == null) {
@@ -325,8 +367,18 @@ router.post('/userLogin', (req, res) => {
     else {
       __consoleSuccess(`User with: username=${username} and password=${hashed_password} found. returning data...`)
 
+      const access_token = jwt.sign({
+        username: user.username,
+        id: user._id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name
+      },
+      ACCESS_TOKEN_SCRET)
+
       res.json({
         success: true,
+        access_token: access_token,
         user_id: user._id
       })
     }
@@ -397,7 +449,18 @@ router.post('/createUser', (req, res) => {
 
         else {
           __consoleSuccess(`Successfully created new user!`)
+
+          const access_token = jwt.sign({
+            username: doc.username,
+            id: doc._id,
+            email: doc.email,
+            first_name: doc.first_name,
+            last_name: doc.last_name
+          },
+          ACCESS_TOKEN_SCRET)
+
           res.json({
+            access_token: access_token,
             success: true,
             user_id: doc._id
           })
@@ -705,6 +768,70 @@ router.post('/barber/createMenu', (req, res) => {
   }); // end of Barber.findOne ()
 
   // end
+})
+
+router.post('/barber/updateMenu', (req, res) => {
+
+  // Update Itemization Menu
+  res.json({
+
+  })
+
+})
+
+router.post('/uploadImage', (req, res) => {
+
+  // Update Itemization Menu
+  let img = req.files.image;
+
+  ImageServiceAPI.upload ( img.data )
+  .then (result => {
+
+    console.log ("Resolved...")
+    // console.log (result)
+    res.json({
+      success: true
+    })
+  })
+  .catch (err => {
+
+    // console.log (err)
+    res.json({
+      success: false,
+      error: err
+    })
+
+  })
+
+
+})
+
+router.post('/validate', (req, res) => {
+  console.log("\nValidate ()")
+  if (!('token' in req.body)) {
+    console.log(`\tError: No token provided`)
+    res.json({
+      success: false,
+      error: "No token provided"
+    })
+    return;
+  }
+
+  // verify token
+  let token = req.body.token
+  jwt.verify(token, ACCESS_TOKEN_SCRET, (err, data) => {
+    if (err) {
+      res.json({
+        success: false,
+        error: "Invalid token"
+      })
+    }
+    else {
+      res.json({
+        success: true
+      })
+    }
+  })
 })
 
 module.exports = router

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, StatusBar, Alert, KeyboardAvoidingView } from 'react-native';
 import data from '../../credentials.json';
+import UserAPI from "../../API/UserAPI"
+import CustomStyle from '../../styles/styles'
 
 export default class LoginForm extends Component {
 
@@ -12,27 +14,30 @@ export default class LoginForm extends Component {
     	this.state = {
       		username: '',
       		password: '',
+					attempted: false
 		}
 	}
 
 	_handlePress() {
 
+		UserAPI.login(this.state.username, this.state.password)
+		.then(response => {
+			console.log("Response")
+			if (response.data.success) {
+				// setup login token and log user in
+				localStorage.setItem(`token`, response.data.access_token)
+				localStorage.setItem('id', response.data.user_id)
+				// redirect to home page
+				this.props.navigation.navigate("Success Loading", {
+					action: "validate_login"
+				})
+			}
+		})
+		.catch(error => {
+			console.log(`Error: ${error}`)
+		})
 		// this function checks that the inputted username and password are correct
-
-		if (this.state.username == data.username && this.state.password == data.password) {
-			Alert.alert("Login Successful");
-		}
-		else {
-			Alert.alert("Login Failed");
-		}
-
-		this.userInput.clear();
-		this.passwordInput.clear();
-
-		this.state = {
-      		username: '',
-      		password: ''
-		}
+		this.setState({attempted: true})
 	}
 
 	render() {
@@ -44,38 +49,48 @@ export default class LoginForm extends Component {
 
 				<StatusBar barStyle="dark-content"/>
 
-				<TextInput 
-					placeholder="Username"
-					returnKeyType="next"
-					// go to password input box
-					onSubmitEditing={() => this.passwordInput.focus()}
-					keyboardType="email-address"
-					autoCapitalize="none"
-					autoCorrect={false}
-					style={styles.input}
-					ref={ (input) => this.userInput = input }
-					onChangeText = { (text) => this.setState({username:text}) } 
-				/>
+				<KeyboardAvoidingView behavior="padding" style={styles.inputContainer}>
+					<View style={CustomStyle.spacious}>
+						<TextInput
+							placeholder="Username"
+							returnKeyType="next"
+							// go to password input box
+							onSubmitEditing={() => this.passwordInput.focus()}
+							keyboardType="email-address"
+							autoCapitalize="none"
+							autoCorrect={false}
+							style={CustomStyle.mainInputField}
+							ref={ (input) => this.userInput = input }
+							onChangeText = { (text) => this.setState({username:text}) }
+						/>
+					</View>
 
-				<TextInput
-					placeholder="Password"
-					secureTextEntry
-					returnKeyType="send"
-					autoCapitalize="none"
-					autoCorrect={false}
-					style={styles.input}
-					ref={ (input) => this.passwordInput = input}
-					onChangeText = { (text) => this.setState({password:text}) }
-					// call _handlePress when the user hits Submit on the iphone keyboard
-					onSubmitEditing = { () => this._handlePress() }
-				/>
+					<View style={CustomStyle.spacious}>
+						<TextInput
+							placeholder="Password"
+							secureTextEntry
+							returnKeyType="send"
+							autoCapitalize="none"
+							autoCorrect={false}
+							style={CustomStyle.mainInputField}
+							ref={ (input) => this.passwordInput = input}
+							onChangeText = { (text) => this.setState({password:text}) }
+							// call _handlePress when the user hits Submit on the iphone keyboard
+							onSubmitEditing = { () => this._handlePress() }
+						/>
+					</View>
+				</KeyboardAvoidingView>
 
-				<TouchableOpacity
-					// call _handlePress when the user hits LOGIN
-					onPress={ () => this._handlePress() }
-					style={styles.buttonContainer}>
-					<Text style={styles.buttonText}>LOGIN</Text>
-				</TouchableOpacity>
+				<View style={CustomStyle.bottomButtonBox}>
+					{this.state.attempted &&<Text style={CustomStyle.invalidText}>Problem logging in</Text>}
+					<TouchableOpacity
+						// call _handlePress when the user hits LOGIN
+						style={CustomStyle.mainButtonContainer}
+						onPress={ () => this._handlePress() }>
+						<Text style={CustomStyle.mainButtonText}>Login</Text>
+					</TouchableOpacity>
+				</View>
+
 			</View>
 		);
 	}
@@ -85,7 +100,12 @@ export default class LoginForm extends Component {
 // as well as background colors and formats
 const styles = StyleSheet.create({
 	container: {
-		padding: 30
+		padding: 60,
+		flex: 1
+	},
+
+	inputContainer: {
+		flex: 4
 	},
 
 	input: {

@@ -1,8 +1,8 @@
 {
+  "urlRandomness": "6t-ba8",
   "hostType": "lan",
   "lanType": "ip",
   "dev": true,
   "minify": false,
-  "urlRandomness": "pj-2kx",
   "https": false
 }
