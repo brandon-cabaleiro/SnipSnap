@@ -34,7 +34,8 @@ export default class ExploreBarberScreen extends Component {
       sliding_mode: true,
       loaded_item_menus: [],
       selected_item_menu: null,
-      swipe_down_transition: false
+      swipe_down_transition: false,
+      user_data: null
     }
   }
 
@@ -170,10 +171,10 @@ export default class ExploreBarberScreen extends Component {
     })
 
     this.state.touch_pan.addListener((x) => {
-      console.log("Changing")
-      console.log(x)
       this.forceUpdate()
     })
+
+    this.updateUserData()
   }
 
   expandCard() {
@@ -222,9 +223,18 @@ export default class ExploreBarberScreen extends Component {
     return 'no image'
   }
 
+  updateUserData() {
+    let user_id = localStorage.getItem(`id`)
+    UserAPI.getUser(user_id)
+    .then(user_data => {
+      this.setState({user_data: user_data.data})
+    })
+    .catch(err => {
+      console.log(`User data failed to load`)
+    })
+  }
+
   getCardStyle (expand_lerp) {
-    console.log(`Card Style Lerp:`)
-    console.log(expand_lerp)
 
     return {
       width: `${100 + (20 * expand_lerp)}%`,
@@ -249,6 +259,19 @@ export default class ExploreBarberScreen extends Component {
       zIndex: 0
     }
 
+  }
+
+  barberSaved (barber_id) {
+    console.log(`Barber Saved ? ${barber_id}`)
+    console.log(`User data...`)
+    console.log(this.state.user_data)
+    // check if the barber_id is in our user_data's saved barbers
+    if (this.state.user_data != null && 'saved' in this.state.user_data && typeof this.state.user_data.saved == typeof []) {
+      console.log(`=> saved: ${this.state.user_data.saved.includes(barber_id)}`)
+      return this.state.user_data.saved.includes(barber_id)
+    }
+    console.log(`=> saved default: false`)
+    return false
   }
 
   showMenuOptions() {
@@ -426,10 +449,45 @@ export default class ExploreBarberScreen extends Component {
                       <Text style={styles.cardDistanceText}>{this.calculateDistance([0, 0], barber.location)} miles away</Text>
 
                       <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 20}}>
-                        <TouchableOpacity style={styles.barberInteractButton}>
-                          <Text style={styles.barberInteractionText}>Save</Text>
+                        <TouchableOpacity onPress={() => {
+                          // call the save user api
+
+                          console.log(`User ID: ${this.state.user_data.user_id}`)
+                          if (this.barberSaved(barber._id)) {
+                            // unsave it
+                            UserAPI.unsaveBarber(this.state.user_data == null ? null : this.state.user_data.user_id, barber._id)
+                            .then (response => {
+                              // update the user's data
+                              console.log(`Barber unsaved`)
+                              console.log(response)
+                              this.updateUserData ()
+                            })
+                            .catch (err => {
+                              `Problem unsaving barber`
+                            })
+                          }
+                          else {
+                            // save it
+                            UserAPI.saveBarber(this.state.user_data == null ? null : this.state.user_data.user_id, barber._id)
+                            .then (response => {
+                              console.log(`Barber saved`)
+                              console.log(response)
+                              this.updateUserData ()
+                            })
+                            .catch (err => {
+                              `Problem saving barber`
+                            })
+                          }
+
+                        }} style={this.barberSaved(barber._id) ? styles.barberInteractButtonActive : styles.barberInteractButton}>
+                          <Text style={this.barberSaved(barber._id) ? styles.barberInteractTextActive : styles.barberInteractionText}>{this.barberSaved(barber._id) ? 'Saved' : 'Save'}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.barberInteractButton}>
+                        <TouchableOpacity onPress={() => {
+                          this.props.navigation.navigate("Scheduele an Appointment", {
+                            barber_id: barber._id,
+                            user_id: this.state.user_data.user_id
+                          })
+                        }} style={styles.barberInteractButton}>
                           <Text style={styles.barberInteractionText}>Schedule</Text>
                         </TouchableOpacity>
                       </View>
@@ -612,6 +670,21 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginRight: 8,
     marginLeft: 8
+  },
+  barberInteractButtonActive: {
+      height: 50,
+      width: 120,
+      backgroundColor: '#000000',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 1,
+      borderColor: '#000000',
+      borderRadius: 3,
+      marginRight: 8,
+      marginLeft: 8
+  },
+  barberInteractTextActive: {
+    color: '#ffffff'
   },
   barberInteractionText: {
     fontSize: 17,

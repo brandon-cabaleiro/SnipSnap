@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Text, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, Text, KeyboardAvoidingView } from 'react-native';
 import UserAPI from '../API/UserAPI'
 
 export default class ProfileScreen extends Component {
@@ -27,11 +27,25 @@ export default class ProfileScreen extends Component {
 			// sets up containers for logo and motto and login input boxes
 			// <KeyboardAvoidingView behavior="padding" style={styles.container}>
 			<View style={styles.container}>
-        <Image
-          style={styles.logo}
-          source={require('../images/logo-loading.svg')}
-        />
-        <Text>User Profile</Text>
+        <View style={{marginTop: 20, marginBottom: 20}}>
+          <Image
+            style={styles.logo}
+            source={require('../images/logo2.svg')}
+          />
+        </View>
+        <View style={{flex: 1, width: '100%', paddingLeft: 40, paddingRight: 40}}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.nameText}>FirstName </Text>
+            <Text style={styles.nameText}>LastName</Text>
+          </View>
+          <Text>Customer</Text>
+          <TouchableOpacity style={styles.logoutButton}><Text style={{color: 'white', fontSize: 15}}>Logout</Text></TouchableOpacity>
+
+          <View>
+            <Text>Schedules</Text>
+          </View>
+
+        </View>
 			</View>
 		);
 	}
@@ -47,7 +61,22 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
   logo: {
-		width: 150,
-		height: 150
-	}
+		width: 80,
+		height: 80,
+	},
+  nameText: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: 'rgba(0, 0, 0, 0.8)',
+		alignItems: 'flex-start',
+		justifyContent: 'left',
+  },
+  logoutButton: {
+    backgroundColor: '#d64545',
+    marginTop: 20,
+    height: 40,
+		alignItems: 'center',
+		justifyContent: 'center',
+    borderRadius: 3
+  }
 });

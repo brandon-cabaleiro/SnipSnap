@@ -8,15 +8,17 @@ import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import { createAppContainer } from 'react-navigation'
-import SvgIcon from '@material-ui/core/SvgIcon';
 import { createIconSetFromFontello } from 'react-native-vector-icons';
 import fontelloConfig from './src/config.json';
 
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 
+import TransitionScreen from './screens/TransitionScreen'
+import AppointmentDaySlotScreen from './screens/AppointmentDaySlotScreen'
 import FilterBarberScreen from './screens/FilterBarberScreen'
 import SortBarberScreen from './screens/SortBarberScreen'
+import SchedueleAppointment from './screens/SchedueleAppointment'
 import ExploreBarberScreen from './screens/ExploreBarberScreen'
 import ProfileScreen from './screens/ProfileScreen'
 import Welcome from './screens/HomeScreen';
@@ -24,9 +26,9 @@ import Login from './components/Login/Login';
 import {Signup, SignupPart2, SignupPart3} from './components/SignUp/SignUp';
 import SuccessLoading from './components/Loading/SuccessLoading'
 import ScheduleIcon from './images/calendar.svg'
-import Icon from 'react-native-vector-icons/FontAwesome';
+// import Icon from 'react-native-vector-icons/FontAwesome';
 
-// const Icon = createIconSetFromFontello(fontelloConfig);
+const Icon = createIconSetFromFontello(fontelloConfig);
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Tab_ = createMaterialBottomTabNavigator()
@@ -48,6 +50,9 @@ class BarberExplorer extends Component {
         <Stack.Screen name="Barber Explorer" component={ExploreBarberScreen} options={{headerShown: false}} />
         <Stack.Screen name="Filter Barbers" component={FilterBarberScreen} />
         <Stack.Screen name="Sort Barbers" component={SortBarberScreen} />
+        <Stack.Screen name="Select Appointment Day Slot" component={AppointmentDaySlotScreen} />
+        <Stack.Screen name="Scheduele an Appointment" component={SchedueleAppointment} />
+        <Stack.Screen name="Transition Screen" component={TransitionScreen} />
       </Stack.Navigator>
     )
   }
@@ -61,21 +66,25 @@ class MainAppScreen extends Component {
   render () {
     return (
       <Tab.Navigator
-        screenOptions={({route}) => ({
-          taBarIcon: ({ focused, color, size }) => {
-          return <Icon name="rocket" size={80} color="#000000" />;
+        initialRouteName="Explore"
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
 
-            let icon_name;
-            if (route.name == 'Schedule') icon_name = 'calendar';
-            else if (route.name == 'Explore') icon_name = 'logo';
-            else if (route.name == 'Profile') icon_name = 'comb';
-
-            if (false) return <Icon name="" size={size} color={color} />
-          }
+            let icon_name = 'rocket'
+            if (route.name == 'Schedule') icon_name = 'calendar'
+            else if (route.name == 'Explore') icon_name = 'logo'
+            else if (route.name == 'Profile') icon_name = 'comb'
+            // You can return any component that you like here!
+            // return <Icon name={icon_name} size={focused ? size : size - 3} color={color} />
+            // return <Ionicons name={'"md-checkmark-circle'} size={size} color={color} />;
+          },
         })}
         tabBarOptions={{
-          activeTintColor: 'red',
-          inactiveTintColor: 'green'
+          activeTintColor: 'white',
+          inactiveTintColor: 'rgba(255, 255, 255, 0.4)',
+          style: {
+            backgroundColor: '#24253B'
+          }
         }}
       >
         <Tab.Screen name="Schedule" component={ProfileScreen} />

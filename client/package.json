@@ -28,6 +28,8 @@
     "expo-web-browser": "~8.0.0",
     "http-proxy-middleware": "^1.0.3",
     "isemail": "^3.2.0",
+    "lottie-ios": "^2.5.3",
+    "lottie-react-native": "^3.3.2",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
@@ -35,6 +37,7 @@
     "react-native-gesture-handler": "~1.5.0",
     "react-native-keyboard-aware-scrollview": "^2.1.0",
     "react-native-material-dropdown": "^0.11.1",
+    "react-native-modal-select-list": "^1.0.0",
     "react-native-paper": "^3.8.0",
     "react-native-safe-area-context": "0.6.0",
     "react-native-screens": "2.0.0-alpha.12",
@@ -49,5 +52,9 @@
     "jest-expo": "~36.0.1"
   },
   "private": true,
-  "rnpm": { "assets": [ "resources/fonts" ] }
+  "rnpm": {
+    "assets": [
+      "resources/fonts"
+    ]
+  }
 }

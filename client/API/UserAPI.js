@@ -24,6 +24,37 @@ let UserAPI = {
       token: token
     })
   },
+  getUser: (user_id) => {
+    return axios.get( url(`/api/getUser/${user_id}`))
+  },
+  getSchedule: (user_id) => {
+    return axios.get( url(`/api/getSchedule/${user_id}`) )
+  },
+  getBarberAvailability: (barber_id) => {
+    return axios.get( url(`/api/getBarberAvailability/${barber_id}`) )
+  },
+  getBarberScheduleForDay: (barber_id, date) => {
+    return axios.get( url(`/api/getBarberScheduleForDay/${barber_id}/${date.toISOString()}`) )
+  },
+  makeAppointment: ( user_id, barber_id, date ) => {
+    return axios.post( url(`/api/makeAppointment`), {
+      user_id: user_id,
+      barber_id: barber_id,
+      schedule_date: date
+    } )
+  },
+  saveBarber: (user_id, barber_id) => {
+    return axios.post( url('/api/saveBarber'), {
+      user_id: user_id,
+      barber_id: barber_id
+    } )
+  },
+  unsaveBarber: (user_id, barber_id) => {
+    return axios.post( url('/api/unsaveBarber'), {
+      user_id: user_id,
+      barber_id: barber_id
+    } )
+  },
   loggedIn: async () => {
     let token = localStorage.getItem('token')
     console.log(`TOKEN: ${token}`)
