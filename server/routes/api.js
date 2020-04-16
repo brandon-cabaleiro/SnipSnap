@@ -560,7 +560,7 @@ router.post('/userLogin', (req, res) => {
 router.post('/createUser', (req, res) => {
   console.log('\n\n')
 
-
+  console.log(req.body.username);
 
   // check if the required body fields are filled out
   if (!('username' in req.body) || !('password' in req.body) || !('first_name' in req.body)

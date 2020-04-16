@@ -14,6 +14,7 @@ import fontelloConfig from './src/config.json';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 
+<<<<<<< HEAD
 import TransitionScreen from './screens/TransitionScreen'
 import AppointmentDaySlotScreen from './screens/AppointmentDaySlotScreen'
 import FilterBarberScreen from './screens/FilterBarberScreen'
@@ -27,6 +28,12 @@ import {Signup, SignupPart2, SignupPart3} from './components/SignUp/SignUp';
 import SuccessLoading from './components/Loading/SuccessLoading'
 import ScheduleIcon from './images/calendar.svg'
 // import Icon from 'react-native-vector-icons/FontAwesome';
+=======
+import Welcome from './screens/Welcome';
+import Login from './screens/Login/Login';
+import SignUp from './screens/SignUp/SignUp';
+import Home from './screens/Home';
+>>>>>>> master
 
 const Icon = createIconSetFromFontello(fontelloConfig);
 const Stack = createStackNavigator();
@@ -129,6 +136,7 @@ class MainAppScreen extends Component {
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
+<<<<<<< HEAD
           <Stack.Navigator screenOptions={{
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
           }}>
@@ -153,6 +161,13 @@ class MainAppScreen extends Component {
             <Stack.Screen name="Success Loading" component={SuccessLoading} options={{headerShown: false}} />
 
             <Stack.Screen name="Main App" component={MainAppScreen} options={{headerShown: false}} />
+=======
+          <Stack.Navigator>
+            <Stack.Screen name="Welcome" component={Welcome} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Sign Up" component={SignUp}/>
+            <Stack.Screen name="Home" component={Home}/>
+>>>>>>> master
           </Stack.Navigator>
         </NavigationContainer>
       </View>
