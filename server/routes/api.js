@@ -1,13 +1,17 @@
 const chalk = require('chalk')
 const express = require('express')
 var router = express.Router()
-const jwt = require("jsonwebtoken")
+var jwt = require(`jsonwebtoken`)
+
+const ImageServiceAPI = require('../services/image_upload')
+const ACCESS_TOKEN_SCRET = "klafkeagjkasfnlafjfk12-091ifkasdlfajkfjeiaflakefjl"
 
 // Schemas
 const ObjectID = require('mongoose').Types.ObjectId
 const User = require('../models/UserSchema')
 const Barber = require('../models/BarberSchema')
 const ItemMenu = require('../models/ItemMenuSchema')
+const Schedule = require('../models/ScheduleSchema')
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ==========================API ROUTES==========================
@@ -29,6 +33,120 @@ let __consoleError = (__str__) => {
 ======================
 */
 
+router.get(`/getSchedule/:user_id`, (req, res) => {
+  console.log(`getSchedule(${req.params.user_id})`)
+
+  if (!ObjectID.isValid(req.params.user_id)) {
+    console.log(`Invalid user id format`)
+    res.json({
+      success: false,
+      error: "Invalid user id format"
+    })
+    return;
+  }
+
+  Schedule.find({scheduler: user_id}, (err, schedules) => {
+    if (err || schedules == null) {
+      console.log(`Problem finding schedules`)
+      res.json({
+        success: false,
+        error: "Problem finding schedules"
+      })
+    }
+    else {
+      console.log(`Got all schedules!`)
+      res.json({
+        success: true,
+        schedules: schedules
+      })
+    }
+  })
+})
+
+router.get(`/getBarberScheduleForDay/:barber_id/:iso_date_string`, (req, res) => {
+  let timestamp = Date.parse(req.params.iso_date_string)
+  let barber_id = req.params.barber_id
+
+  console.log(`GetBarberScheduleForDay`)
+  if (isNaN(timestamp)) {
+    console.log(`Invalid ISO Date String provided...`)
+    res.json({
+      success: false,
+      error: "Invalid date provided"
+    })
+    return;
+  }
+
+  if (!ObjectID.isValid(barber_id)) {
+    console.log(`Invalid ID Provided...`)
+    res.json({
+      success: false,
+      error: "Invalid ID Provided"
+    })
+    return;
+  }
+
+  // create the date and search for barber's schedule...
+  let date = new Date(req.params.iso_date_string)
+  let end_date = new Date()
+  end_date.setDate(date.getDate() + 1)
+
+  Schedule.find({
+    barber: barber_id,
+    time: {
+      '$gte': date, // greter than or equal to specified date
+      '$lt':  end_date // less than the next day's date + 1
+    }}, (err, schedules) => {
+    if (err || schedules == null) {
+      console.log(`Problem finding schedules`)
+      res.json({
+        success: false,
+        error: "Problem finding schedules"
+      })
+    }
+    else {
+      console.log(`Successfully found schedules`)
+      res.json({
+        success: true,
+        schedules: schedules
+      })
+    }
+
+  })
+
+})
+
+router.get(`/getBarberAvailability/:barber_id`, (req, res) => {
+  let barber_id = req.params.barber_id
+  console.log(`getBarberAvailability()`)
+
+  if (!ObjectID.isValid(barber_id)) {
+    console.log(`Invalid id provided`)
+    res.json({
+      success: false,
+      error: "Invalid id provided"
+    })
+    return;
+  }
+
+  Barber.findOne({_id: barber_id}, (err, barber_) => {
+    if (err || barber_ == null) {
+      console.log(`Problem finding barber`)
+      res.json({
+        success: false,
+        error: 'Problem finding barber'
+      })
+    }
+    else {
+      console.log(`Found barber`)
+      res.json({
+        success: true,
+        availability: barber_.availability
+      })
+    }
+  })
+})
+
 router.get('/getUser/:user_id', (req, res) => {
   console.log ('\n\n')
   // Retrieve the user_id information
@@ -45,7 +163,6 @@ router.get('/getUser/:user_id', (req, res) => {
     })
     return;
   }
-
 
   __consoleSuccess(`Get Request Recieved: GetUser (${user_id})`)
 
@@ -84,6 +201,7 @@ router.get('/getUser/:user_id', (req, res) => {
         last_name: user.last_name,
         user_id: user_id,
         username: user.username,
+        saved: user.saved,
         success: true
       })
       return;
@@ -93,6 +211,94 @@ router.get('/getUser/:user_id', (req, res) => {
 
 })
 
+router.get(`/getSaved/:userId`, (req, res) => {
+
+  let user_id = req.params.userId
+  console.log(`Getting Saved: ${user_id}`)
+  if (!ObjectID.isValid(user_id)) {
+    console.log(`Invalid user id`)
+    res.json({
+      success: false,
+      error: "Invalid user id"
+    })
+    return;
+  }
+
+  User.findOne({_id: user_id}, (err, user) => {
+    if (err || user == null) {
+      console.log(`Problem finding user`)
+      res.json({
+        success: false,
+        error: "Problem finding user"
+      })
+    }
+    else {
+      // find the barbers they saved
+      let saved = user.saved
+
+      let saved_results = []
+      saved.forEach(barber_id => {
+        saved_results.push(new Promise(function(resolve, reject) {
+          Barber.findOne({_id: barber_id}, (err, barber_doc) => {
+            if (err || barber_doc == null) {
+              console.log(`Problem finding barber...`)
+              resolve(null)
+            }
+            else {
+              console.log(`Found one barber`)
+              resolve(barber_doc)
+            }
+          })
+        }));
+      })
+
+      // wait for all the data to return
+      Promise.all(saved_results).then(saved_barbers => {
+        let true_saved_barbers = saved_barbers.filter(_barber_ => _barber_ != null)
+
+        res.json({
+          saved: true_saved_barbers,
+          success: true
+        })
+      })
+    }
+  })
+
+})
+
+router.get('/getBarbers/:skip/:limit', (req, res) => {
+  console.log(`\n\n`)
+  console.log(`getBarbers(${req.params.skip}, ${req.params.limit})`)
+
+  let skip_ = parseInt(req.params.skip)
+  let limit_ = parseInt(req.params.limit)
+
+  if (skip_ == NaN || limit_ == NaN) {
+    console.log (`Invalid params provided`)
+    res.json({
+      success: false,
+      error: "Invalid params provided"
+    })
+    return;
+  }
+
+  Barber.find({}, null, { skip: skip_, limit: limit_}, (err, docs) => {
+    if (err || docs == null) {
+      console.log(`Error retriving barbers...`)
+      res.json({
+        success: false,
+        error: "Problem retrieving barber"
+      })
+    }
+    else {
+      console.log(`Successfully retrieved barbers`)
+      res.json({
+        success: true,
+        barbers: docs
+      })
+    }
+  })
+})
 
 router.get('/getBarber/:barber_id', (req, res) => {
   console.log ("\n\n")
@@ -186,10 +392,12 @@ router.get('/getBarber/:barber_id', (req, res) => {
 
       __consoleSuccess(`Barber with id=${barber_id} found. returning...`)
       res.json({
+        itemized_menus: unpacked_repsonses,
+        location: barber.location,
         shop_name: barber.shop_name,
         user_ref_id: barber.user_ref_id,
-        itemized_menus: unpacked_repsonses,
-        success: true
+        success: true,
+        recent_story: barber.recent_story,
       })
 
     }
@@ -313,6 +521,9 @@ router.post('/userLogin', (req, res) => {
   }
 
   __consoleSuccess(`Post Request Recieved: userLogin(${username}, ${hashed_password})`)
+
+
+
   User.findOne({ username: username, password: hashed_password}, (err, user) => {
 
     if (err || user == null) {
@@ -326,8 +537,18 @@ router.post('/userLogin', (req, res) => {
     else {
       __consoleSuccess(`User with: username=${username} and password=${hashed_password} found. returning data...`)
 
+      const access_token = jwt.sign({
+        username: user.username,
+        id: user._id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name
+      },
+      ACCESS_TOKEN_SCRET)
+
       res.json({
         success: true,
+        access_token: access_token,
         user_id: user._id
       })
     }
@@ -339,7 +560,7 @@ router.post('/userLogin', (req, res) => {
 router.post('/createUser', (req, res) => {
   console.log('\n\n')
 
-  console.log(req.body.username); 
+  console.log(req.body.username);
 
   // check if the required body fields are filled out
   if (!('username' in req.body) || !('password' in req.body) || !('first_name' in req.body)
@@ -398,7 +619,18 @@ router.post('/createUser', (req, res) => {
 
         else {
           __consoleSuccess(`Successfully created new user!`)
+
+          const access_token = jwt.sign({
+            username: doc.username,
+            id: doc._id,
+            email: doc.email,
+            first_name: doc.first_name,
+            last_name: doc.last_name
+          },
+          ACCESS_TOKEN_SCRET)
+
           res.json({
+            access_token: access_token,
             success: true,
             user_id: doc._id
           })
@@ -708,4 +940,252 @@ router.post('/barber/createMenu', (req, res) => {
   // end
 })
 
-module.exports = router; 
+router.post('/barber/updateMenu', (req, res) => {
+
+  // Update Itemization Menu
+  res.json({
+
+  })
+
+})
+
+router.post('/uploadImage', (req, res) => {
+
+  // Update Itemization Menu
+  let img = req.files.image;
+
+  ImageServiceAPI.upload ( img.data )
+  .then (result => {
+
+    console.log ("Resolved...")
+    // console.log (result)
+    res.json({
+      success: true
+    })
+  })
+  .catch (err => {
+
+    // console.log (err)
+    res.json({
+      success: false,
+      error: err
+    })
+
+  })
+
+
+})
+
+router.post('/validate', (req, res) => {
+  console.log("\nValidate ()")
+  if (!('token' in req.body)) {
+    console.log(`\tError: No token provided`)
+    res.json({
+      success: false,
+      error: "No token provided"
+    })
+    return;
+  }
+
+  // verify token
+  let token = req.body.token
+  jwt.verify(token, ACCESS_TOKEN_SCRET, (err, data) => {
+    if (err) {
+      res.json({
+        success: false,
+        error: "Invalid token"
+      })
+    }
+    else {
+      res.json({
+        success: true
+      })
+    }
+  })
+})
+
+router.post(`/saveBarber/`, (req, res) => {
+
+  let user_id = 'user_id' in req.body ? req.body.user_id : null
+  let barber_id = `barber_id` in req.body ? req.body.barber_id : null
+  console.log(`SaveBarber(user_id: ${user_id}, barber_id: ${barber_id})`)
+
+  if (user_id == null || barber_id == null) {
+    console.log(`Invalid user id or barber id probided`)
+    res.json({
+      success: false,
+      error: "Inalid id provided"
+    })
+    return;
+  }
+
+  if (!ObjectID.isValid(user_id) || !ObjectID.isValid(barber_id)) {
+    console.log(`Invalid user id or barber id format`)
+    res.json({
+      success: false,
+      error: "Inalid id format"
+    })
+    return;
+  }
+
+  User.findOne({_id: user_id}, (err, user_) => {
+    if (err || user_ == null) {
+      console.log(`Problem finding user...`)
+      res.json({
+        success: false,
+        error: "Problem finding user"
+      })
+    }
+    else {
+      // update the user's saved
+      let new_saved = [...user_.saved]
+      if (!new_saved.includes(barber_id)) {
+
+        new_saved.push(ObjectID(barber_id))
+        user_.updateOne({saved: new_saved}, (err) => {
+          if (err) {
+            console.log(`Error updating...`)
+            res.json({
+              success: false,
+              error: "Problem updating"
+            })
+          }
+          else {
+            console.log(`Successfully saved barber`)
+            res.json({
+              success: true,
+              saved: new_saved
+            })
+          }
+        })
+
+      }
+      else {
+        // if the barber is already saved, just return the saved and success = true
+        res.json({
+          success: true,
+          saved: new_saved
+        })
+      }
+
+    }
+  })
+})
+
+router.post(`/unsaveBarber/`, (req, res) => {
+
+  let user_id = 'user_id' in req.body ? req.body.user_id : null
+  let barber_id = `barber_id` in req.body ? req.body.barber_id : null
+  console.log(`SaveBarber(user_id: ${user_id}, barber_id: ${barber_id})`)
+
+  if (user_id == null || barber_id == null) {
+    console.log(`Invalid user id or barber id probided`)
+    res.json({
+      success: false,
+      error: "Inalid id provided"
+    })
+    return;
+  }
+
+  if (!ObjectID.isValid(user_id) || !ObjectID.isValid(barber_id)) {
+    console.log(`Invalid user id or barber id format`)
+    res.json({
+      success: false,
+      error: "Inalid id format"
+    })
+    return;
+  }
+
+  User.findOne({_id: user_id}, (err, user_) => {
+    if (err || user_ == null) {
+      console.log(`Problem finding user...`)
+      res.json({
+        success: false,
+        error: "Problem finding user"
+      })
+    }
+    else {
+      // update the user's saved
+      let new_saved = [...user_.saved]
+      let string_saved = new_saved.map(_id => _id.toString())
+
+      if (!string_saved.includes(barber_id)) {
+
+        console.log(`user did not save the barber.`)
+        // if the barber is already saved, just return the saved and success = true
+        res.json({
+          success: true,
+          saved: new_saved
+        })
+
+      }
+      else {
+
+        // remove the barber id
+        new_saved.splice(string_saved.indexOf(barber_id), 1)
+        // update the user now
+        user_.updateOne({saved: new_saved}, (err) => {
+          if (err) {
+            console.log(`Problem updating the user's saved...`)
+            res.json({
+              success: false,
+              error: "Problem saving user saved"
+            })
+          }
+          else {
+            console.log(`Successfully removed barber from user's saved`)
+            res.json({
+              success: true,
+              saved: new_saved
+            })
+          }
+        })
+
+      }
+
+    }
+  })
+})
+
+router.post(`/makeAppointment/`, (req, res) => {
+  console.log(`makeAppointment()`)
+
+  let user_id = req.body.user_id
+  let barber_id = req.body.barber_id
+  let schedule_date = req.body.schedule_date
+
+  if (!ObjectID.isValid(user_id) || !ObjectID.isValid(barber_id)) {
+    console.log(`invalid user id or barber id provided`)
+    res.json({
+      success: false,
+      error: "Invalid id provided"
+    })
+    return;
+  }
+
+  console.log(schedule_date)
+
+  let new_schedule = Schedule({
+    scheduler: ObjectID(user_id),
+    barber: ObjectID(barber_id),
+    time: schedule_date
+  })
+
+  new_schedule.save((err) => {
+    if (err) {
+      console.log(`Could not save new schedule`)
+      res.json({
+        success: false,
+        error: 'Could not save schedule'
+      })
+    }
+    else {
+      console.log(`Schedule saved successfully`)
+      res.json({
+        success: true
+      })
+    }
+  })
+})
+
+module.exports = router

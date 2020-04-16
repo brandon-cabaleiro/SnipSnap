@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const chalk = require('chalk');
+const fileUpload = require('express-fileupload')
 
 // For Login/Registration
 
@@ -34,6 +35,10 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+// enable files upload
+app.use(fileUpload({
+    createParentPath: true
+}));
 
 // Setup Routes
 app.use('/api', api_routes)

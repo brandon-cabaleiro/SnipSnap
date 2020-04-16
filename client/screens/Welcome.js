@@ -5,32 +5,51 @@ import * as WebBrowser from 'expo-web-browser';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { MonoText } from '../components/StyledText';
+import UserAPI from '../API/UserAPI'
+import CustomStyles from '../styles/styles'
 
 export default class Welcome extends Component {
 
-  // Sets a container to display logo, motto, and buttons.
+  componentDidMount () {
+    // check if user is logged in
+    console.log(`In Home Screen`)
+    UserAPI.loggedIn()
+    .then(res => {
+      console.log(`Login Check: ${res}`)
+      // navigate to
+      this.props.navigation.navigate("Main App")
+    })
+    .catch(err => {
+      console.log(`${err}`)
+    })
+  }
+
+  // sets a container to display logo, motto, and buttons
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.logoContainer}>
-          <Image 
-            style={styles.logo} 
-            source={require('../images/logo.png')} 
+          <Image
+            style={styles.logo}
+            source={require('../images/logo2.svg')}
           />
-          <Text style={styles.title}>
-            "We'll snip that snap real quick"
-          </Text>
         </View>
-        <TouchableOpacity
-          onPress={ () => this.props.navigation.navigate('Login') } // when Login is pressed go to the login page
-          style={styles.buttonContainer}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={ () => this.props.navigation.navigate('Sign Up') } // when Sign Up is pressed go to the sign up page
-          style={styles.buttonContainer}>
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
+
+        <View style={CustomStyles.mainButtonBox}>
+          <TouchableOpacity
+            onPress={ () => this.props.navigation.navigate('Login') } // when Login is pressed go to the login page
+            style={CustomStyles.mainButtonContainer}>
+            <Text style={CustomStyles.mainButtonText}>Login</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={CustomStyles.mainButtonBox}>
+          <TouchableOpacity
+            onPress={ () => this.props.navigation.navigate('Sign Up') } // when Sign Up is pressed go to the sign up page
+            style={CustomStyles.mainButtonContainer}>
+            <Text style={CustomStyles.mainButtonText}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -42,7 +61,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffff',
-    padding: 30
+    padding: 30,
+    header: null
   },
 
   logoContainer: {
@@ -53,17 +73,7 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: 100,
-    height: 100
+    width: 130,
+    height: 130
   },
-
-  buttonContainer: {
-    paddingVertical: 15,
-    backgroundColor: '#bdc3c7',
-    marginTop: 30
-  },
-
-  buttonText: {
-    textAlign: 'center'
-  }
 });

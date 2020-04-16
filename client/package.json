@@ -13,8 +13,10 @@
   },
   "dependencies": {
     "@expo/vector-icons": "~10.0.0",
+    "@material-ui/core": "^4.9.10",
     "@react-native-community/masked-view": "0.1.5",
-    "@react-navigation/bottom-tabs": "^5.0.0",
+    "@react-navigation/bottom-tabs": "^5.2.6",
+    "@react-navigation/material-bottom-tabs": "^5.1.8",
     "@react-navigation/native": "^5.0.0",
     "@react-navigation/stack": "^5.0.0",
     "@react-navigation/web": "~1.0.0-alpha.9",
@@ -24,20 +26,39 @@
     "expo-constants": "~8.0.0",
     "expo-font": "~8.0.0",
     "expo-web-browser": "~8.0.0",
+<<<<<<< HEAD
+    "http-proxy-middleware": "^1.0.3",
+    "isemail": "^3.2.0",
+    "lottie-ios": "^2.5.3",
+    "lottie-react-native": "^3.3.2",
+=======
     "jwt-decode": "^2.2.0",
+>>>>>>> master
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
+    "react-native-dropdown": "0.0.6",
     "react-native-gesture-handler": "~1.5.0",
     "react-native-keyboard-aware-scrollview": "^2.1.0",
+    "react-native-material-dropdown": "^0.11.1",
+    "react-native-modal-select-list": "^1.0.0",
+    "react-native-paper": "^3.8.0",
     "react-native-safe-area-context": "0.6.0",
     "react-native-screens": "2.0.0-alpha.12",
-    "react-native-web": "~0.11.7"
+    "react-native-swipe-gestures": "^1.0.5",
+    "react-native-vector-icons": "^6.6.0",
+    "react-native-web": "~0.11.7",
+    "react-navigation": "^4.3.7"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "babel-preset-expo": "~8.0.0",
     "jest-expo": "~36.0.1"
   },
-  "private": true
+  "private": true,
+  "rnpm": {
+    "assets": [
+      "resources/fonts"
+    ]
+  }
 }
