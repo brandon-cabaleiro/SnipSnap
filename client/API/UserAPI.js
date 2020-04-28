@@ -43,6 +43,11 @@ let UserAPI = {
       schedule_date: date
     } )
   },
+  cancelAppointment: ( schedule_id ) => {
+    return axios.post( url(`/api/cancelAppointment`), {
+      schedule_id: schedule_id
+    } )
+  },
   saveBarber: (user_id, barber_id) => {
     return axios.post( url('/api/saveBarber'), {
       user_id: user_id,

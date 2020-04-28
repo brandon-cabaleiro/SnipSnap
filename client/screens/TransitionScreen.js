@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, Text, KeyboardAvoidingView } from 'react-native';
 import UserAPI from '../API/UserAPI'
-import LottieView from 'lottie-react-native';
+// import LottieView from 'lottie-react-native';
 
 export default class TransitionScreen extends Component {
   constructor(props) {

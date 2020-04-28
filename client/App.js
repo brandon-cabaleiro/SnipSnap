@@ -14,6 +14,8 @@ import fontelloConfig from './src/config.json';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 
+import ScheduleScreen from './screens/ScheduleScreen'
+import OpenBarberShop from './screens/OpenBarberShop'
 import TransitionScreen from './screens/TransitionScreen'
 import AppointmentDaySlotScreen from './screens/AppointmentDaySlotScreen'
 import FilterBarberScreen from './screens/FilterBarberScreen'
@@ -58,6 +60,17 @@ class BarberExplorer extends Component {
   }
 }
 
+class ProfileExplorer extends Component {
+  render () {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="Profile Page" component={ProfileScreen} options={{headerShown: false}} />
+        <Stack.Screen name="Open Shop" component={OpenBarberShop} />
+      </Stack.Navigator>
+    )
+  }
+}
+
 class MainAppScreen extends Component {
   constructor (props) {
     super (props)
@@ -87,9 +100,9 @@ class MainAppScreen extends Component {
           }
         }}
       >
-        <Tab.Screen name="Schedule" component={ProfileScreen} />
+        <Tab.Screen name="Schedule" component={ScheduleScreen} />
         <Tab.Screen name="Explore" component={BarberExplorer} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
+        <Tab.Screen name="Profile" component={ProfileExplorer} />
       </Tab.Navigator>
     )
   }

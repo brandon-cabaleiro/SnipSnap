@@ -28,8 +28,6 @@
     "expo-web-browser": "~8.0.0",
     "http-proxy-middleware": "^1.0.3",
     "isemail": "^3.2.0",
-    "lottie-ios": "^2.5.3",
-    "lottie-react-native": "^3.3.2",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",

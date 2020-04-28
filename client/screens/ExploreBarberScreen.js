@@ -41,11 +41,13 @@ export default class ExploreBarberScreen extends Component {
 
   filterBarbers (filter_criteria, filter_value) {
     console.log("Filtering Barbers")
+    console.log(`${filter_criteria}, ${filter_value}`)
     if (typeof filter_criteria != typeof "string") return;
     if (typeof filter_value != typeof 123) return;
 
+    console.log(`Filtering...`)
     let old_barbers = this.state.raw_barbers.slice()
-    if (filter_criteria == 'distance') {
+    if (filter_criteria == 'min_distance') {
       old_barbers = old_barbers.filter(barber => this.calculateDistance([0, 0], barber.location) < filter_value)
     }
 
@@ -149,6 +151,7 @@ export default class ExploreBarberScreen extends Component {
   }
 
   componentDidMount () {
+    console.log("Explorer Page Mounting...")
     // check if user is logged in
     console.log(`In Login`)
     UserAPI.loggedIn()

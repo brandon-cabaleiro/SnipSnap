@@ -72,6 +72,7 @@ export default class AppointmentDaySlotScreen extends Component {
     .then (response => {
       if (response.data.success) {
         console.log(`Appointment made !`)
+        this.forceUpdate()
         this.props.navigation.navigate('Barber Explorer');
         // this.props.navigation.navigate("Transition Screen", {
         //   animation: 'check',

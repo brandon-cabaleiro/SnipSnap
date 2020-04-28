@@ -36,7 +36,8 @@ let __consoleError = (__str__) => {
 router.get(`/getSchedule/:user_id`, (req, res) => {
   console.log(`getSchedule(${req.params.user_id})`)
 
-  if (!ObjectID.isValid(req.params.user_id)) {
+  let user_id = req.params.user_id
+  if (!ObjectID.isValid(user_id)) {
     console.log(`Invalid user id format`)
     res.json({
       success: false,
@@ -300,6 +301,112 @@ router.get('/getBarbers/:skip/:limit', (req, res) => {
   })
 })
 
+router.get('/getBarberFromUser/:user_id', (req, res) => {
+  console.log ("\n\n")
+
+  let user_id = 'user_id' in req.params ? req.params.user_id : null
+
+  if (user_id == null) {
+    __consoleError("Invalid Get Request Recieved: getBarber (null)")
+    res.json({
+      success: false,
+      user_id: user_id
+    })
+    return;
+  }
+
+  __consoleSuccess(`Get Request Recieved: GetBarberFromUser(${user_id})`)
+
+  if (!ObjectID.isValid( user_id )) {
+    console.log(`\t${chalk.red('Error: ')} barber id (${user_id}) is not a valid object id`)
+    res.json ({
+      success: false,
+      user_id: user_id
+    })
+    return;
+  }
+
+  // Query the database
+  Barber.findOne({ user_ref_id: ObjectID(user_id) }, async (err, barber) => {
+
+    // could not find barber data
+    if (err || barber == null) {
+
+      __consoleError(`Invalid Get Request Recieved: GetBarber(${user_id})`)
+      console.log(`\t${chalk.red('Error: ')}: Barber could not be found`)
+      console.log(`\t${err}`)
+
+      res.json({
+        success: false,
+        user_id: user_id
+      })
+
+    }
+    else {
+      // attempt to acquire all of the item menus
+      let unpacked_repsonses = []
+
+      let responses = []
+
+      for (let i in barber.item_menus) {
+        responses.push( new Promise((resolve, reject) => {
+
+          // get the menu id and query it in the database
+          let item_menu_id = barber.item_menus[i]
+
+          // check if the menu id is a valid object id
+          if (!ObjectID.isValid(item_menu_id)) {
+            resolve(null) // responses[i] will have the value of null
+                          // that we can later filter out
+          }
+          else {
+            // search for the itemized menu
+            return ItemMenu.findOne({ _id: ObjectID(item_menu_id) }, async (err, item_doc) => {
+              if (err || item_doc == null) resolve(null)
+              else {
+                resolve({
+                  menu_name: item_doc.menu_name,
+                  menu_options: item_doc.menu_options
+                })
+              }
+            })
+          }
+
+        }) )
+
+      }
+
+      // await all of the promises...
+      unpacked_repsonses = new Array(responses.length);
+
+      let fulfilled = false
+      await Promise.all(responses).then((response_arr) => {
+        unpacked_repsonses = response_arr
+        fulfilled = true
+      })
+
+      // block while all promises are still pending
+      while (!fulfilled);
+
+      // remove the responses that are null
+      unpacked_repsonses = unpacked_repsonses.filter(_response_ => _response_ != null)
+
+      __consoleSuccess(`Barber with user id=${user_id} found. returning...`)
+      res.json({
+        itemized_menus: unpacked_repsonses,
+        location: barber.location,
+        shop_name: barber.shop_name,
+        user_ref_id: barber.user_ref_id,
+        success: true,
+        recent_story: barber.recent_story,
+      })
+
+    }
+
+  })
+
+})
+
 router.get('/getBarber/:barber_id', (req, res) => {
   console.log ("\n\n")
 
@@ -392,6 +499,7 @@ router.get('/getBarber/:barber_id', (req, res) => {
 
       __consoleSuccess(`Barber with id=${barber_id} found. returning...`)
       res.json({
+        barber_id: barber_id,
         itemized_menus: unpacked_repsonses,
         location: barber.location,
         shop_name: barber.shop_name,
@@ -705,7 +813,8 @@ router.post('/createBarberShop', (req, res) => {
           new_barber_shop = new Barber({
             shop_name: req.body.shop_name,
             user_ref_id: req.body.user_id,
-            menu_options: []
+            menu_options: [],
+            location: [0, 0]
           })
 
           new_barber_shop.save((err, shop_) => {
@@ -1181,6 +1290,39 @@ router.post(`/makeAppointment/`, (req, res) => {
     }
     else {
       console.log(`Schedule saved successfully`)
+      res.json({
+        success: true
+      })
+    }
+  })
+})
+
+router.post(`/cancelAppointment/`, (req, res) => {
+  console.log(`cancelAppointment()`)
+
+  let schedule_id = req.body.schedule_id
+
+  if (!ObjectID.isValid(schedule_id) ) {
+    console.log(`invalid schedule id provided`)
+    res.json({
+      success: false,
+      error: "Invalid id provided"
+    })
+    return;
+  }
+
+  Schedule.deleteOne({
+    _id: schedule_id
+  }, (err, result) => {
+    if (err) {
+      console.log(`Problem deleting schedule...`)
+      res.json({
+        success: false,
+        error: err
+      })
+    }
+    else {
+      console.log(`Successfully deleted schedule.`)
       res.json({
         success: true
       })
