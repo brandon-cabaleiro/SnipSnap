@@ -24,6 +24,6 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "random-name": "^0.1.2",
-    "validator": "^13.0.0"
+    "validator": "^13.7.0"
   }
 }
